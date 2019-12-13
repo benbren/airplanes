@@ -103,9 +103,9 @@ train_id = sample(1:nrow(airplanes),floor(train_frac*nrow(airplanes)), replace =
 
 test_id = setdiff(1:nrow(airplanes), train_id)
 
-train = airplanes[train_id,] %>% select(us, cabin_flown, recommended)
+train = airplanes[train_id,] %>% select(us, rich, recommended)
 
-test = airplanes[test_id,] %>% select(us,cabin_flown, recommended)
+test = airplanes[test_id,] %>% select(us,rich, recommended)
 
 
 #################################
@@ -142,7 +142,7 @@ sum(pred == real)/length(real)
 ###### SVM 
 #########################
 
-system.time(svm(e1071::formula = recommended ~ ., 
+system.time(e1071::svm(formula = recommended ~ ., 
                data = train, 
                type = 'C-classification', 
                kernel = 'linear'))
@@ -154,7 +154,14 @@ classifier = e1071::svm(formula = recommended ~ .,
 
 y_pred = predict(classifier, newdata = test)
 
-sum(is.na(y_pred))
+id_na1 = is.na(test$recommended)
+
+y_pred_no_na = y_pred[!id_na1]
+
+real_pred_no_na = real[!id_na1]
+
+sum(y_pred_no_na == real_pred_no_na)/length(y_pred_no_na)
+
 
 #########################
 ###### NLP 
