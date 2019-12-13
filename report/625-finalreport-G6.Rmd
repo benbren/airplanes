@@ -16,7 +16,12 @@ library(knitr)
 
 ## Introduction/Motivation
 
+In recent years, the airline 
+
+
 ## Dataset
+
+The dataset for this project
 
 ## Methodology 
 
