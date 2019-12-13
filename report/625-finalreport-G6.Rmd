@@ -1,0 +1,42 @@
+---
+title: "BSTAT 625 Final Project Report"
+author: "Ben Brennan, Mandy Meng Ni Ho, & Tahmeed Tureen"
+date: "Hui625, LLC"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo = FALSE}
+library(knitr)
+```
+
+
+## Introduction/Motivation
+
+## Dataset
+
+## Methodology 
+
+### Statistical Models
+
+### Technology Stack
+
+## Results
+
+```{r, echo = FALSE}
+results_table <- 
+    cbind(model = c("Naive Bayes", "Random Forest", "SVM", "Logistic Regression"),
+          rel_time = c(0,0,0,0),
+          cluster_time = c(0,0,0,0), recall_score = c(0,0,0,0),
+          prec_score = c(0,0,0,0), f1_score = c(0,0,0,0))
+
+colnames(results_table) <- c("Model", "Rel. Time", "Cluster Time",
+                             "Recall", "Precision", "F1 Score")
+
+kable(results_table)
+```
+
+## Deliverables
