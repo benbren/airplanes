@@ -1,22 +1,15 @@
 library(tidyverse)
 library(tidytext) #text mining, unnesting
-library(topicmodels) #the LDA algorithm
-library(kableExtra) #create attractive tables
-library(knitr) #simple table generator
-library(ggrepel) #text and label geoms for ggplot2
-library(gridExtra)
-library(formattable) #color tile and color bar in `kables`
 library(tm) #text mining
-library(circlize) #already loaded, but just being comprehensive
-library(plotly) #interactive ggplot graphs
 library(caret)
 library(doParallel)
 
 options(stringsAsFactors = FALSE)
 airplanes = readr::read_csv('https://raw.githubusercontent.com/quankiquanki/skytrax-reviews-dataset/master/data/airline.csv')
-ff = c("Economy", "Premium Economy", "Business Class", "First Class")
-undesirable_words = c("a","the", "at", "is", "to", "from", "was", "it's", "and", "are", "can't", "as", "has", "this",
-                      "by", "if","his", "her", "them", "it", "she", "he", "them")
+# ff = c("Economy", "Premium Economy", "Business Class", "First Class")
+# undesirable_words = c("a","the", "at", "is", "to", "from", "was", "it's", "and", "are", "can't", "as", "has", "this",
+#                      "by", "if","his", "her", "them", "it", "she", "he", "them")
+
 # modify, extract word -------------------------------------------------
 air_tidy = airplanes %>%
   mutate(cabin_flown = factor(cabin_flown, levels = ff), ID = seq(1,dim(airplanes)[1])) %>%
@@ -36,12 +29,12 @@ air_bing = air_tidy %>%
 #     count(outcome, word) %>%
 #     bind_tf_idf(term = word, document = outcome, n = n)
 
-air_dtm_matrix <- air_bing %>%
+air_dtm_matrix = air_bing %>%
   count(ID, word, sort = TRUE)
 
 air_outcome = unique(air_bing[,c("ID", "recommended")])
 
-air_dtm <- air_bing %>%
+air_dtm = air_bing %>%
   #get word count per document to pass to cast_dtm
   count(ID, word, sort = TRUE) %>%
   ungroup() %>%
@@ -59,7 +52,7 @@ test_y = factor(air_outcome$recommended)[10001:17000]
 # Find out how many cores are available: 
 detectCores()
 # Create cluster with desired number of cores: 
-cl <- makeCluster(4)
+cl = makeCluster(4)
 # Register cluster: 
 registerDoParallel(cl)
 # Find out how many cores are being used
@@ -76,7 +69,12 @@ y_pred = predict(air_rf, test_x)
 # confusion matrix -------------------------------------------------
 con.matrix = confusionMatrix(y_pred, test_y)
 
+# save the model to disk
+saveRDS(air_rf, "./Desktop/final_model.rds")
 
+# load the model
+rf_model = readRDS("./Desktop/final_model.rds")
+print(rf_model)
 
 # test case -------------------------------------------------
 
