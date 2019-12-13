@@ -13,14 +13,14 @@ airplanes = readr::read_csv('https://raw.githubusercontent.com/quankiquanki/skyt
 # modify, extract word -------------------------------------------------
 air_tidy = airplanes %>%
   mutate(cabin_flown = factor(cabin_flown, levels = ff), ID = seq(1,dim(airplanes)[1])) %>%
-  unnest_tokens(word, content) %>%
+  tidytext::unnest_tokens(word, content) %>%
   filter(!word %in% undesirable_words)
 
 # merge with bing to get relevant words -------------------------------------------------
 bing = get_sentiments("bing")
 air_bing = air_tidy %>%
-  mutate(outcome = ifelse(recommended == 1, "Recommend", "Not recommend")) %>%
-  select(ID, word, outcome, cabin_flown, recommended) %>%
+  #mutate(outcome = ifelse(recommended == 1, "Recommend", "Not recommend")) %>%
+  select(ID, word, cabin_flown, recommended) %>%
   unique() %>%
   left_join(bing, by = "word") %>%
   na.omit()
@@ -29,7 +29,7 @@ air_bing = air_tidy %>%
 #     count(outcome, word) %>%
 #     bind_tf_idf(term = word, document = outcome, n = n)
 
-air_dtm_matrix = air_bing %>%
+air_train = air_bing %>%
   count(ID, word, sort = TRUE)
 
 air_outcome = unique(air_bing[,c("ID", "recommended")])
@@ -57,7 +57,7 @@ cl = makeCluster(4)
 registerDoParallel(cl)
 # Find out how many cores are being used
 getDoParWorkers()
-air_rf = train(x = train_x,
+air_rf = caret::train(x = train_x,
                y = train_y,
                method = "ranger", # randon forest
                num.trees = 200,
@@ -65,7 +65,7 @@ air_rf = train(x = train_x,
 stopCluster(cl)
 registerDoSEQ()
 # model test data -------------------------------------------------
-y_pred = predict(air_rf, test_x)
+y_pred = caret::predict(air_rf, test_x)
 # confusion matrix -------------------------------------------------
 con.matrix = confusionMatrix(y_pred, test_y)
 
@@ -78,7 +78,7 @@ print(rf_model)
 
 # test case -------------------------------------------------
 
-comment = "My experience is so bad, they treat me poorly"
+comment = "My experience"
 test = data.frame(ID = 1, content = comment) 
 
 test = test %>% 

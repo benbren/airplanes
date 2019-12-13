@@ -7,7 +7,7 @@ library(tidytext)
 library(e1071) # SVM
 # go lobos 
 # read this god damn data in 
-
+options(stringsAsFactors = FALSE)
 airplanes = readr::read_csv('https://raw.githubusercontent.com/quankiquanki/skytrax-reviews-dataset/master/data/airline.csv')
 
 ##############################
@@ -17,7 +17,7 @@ airplanes = readr::read_csv('https://raw.githubusercontent.com/quankiquanki/skyt
 # barplot 
 
 airplanes %>% select(airline_name, recommended) %>% group_by(airline_name) %>% 
-  summarize(pct = sum(recommended)/length(recommended)) %>% 
+  mutate(pct = sum(recommended)/length(recommended)) %>% 
   filter(airline_name %in% c('delta-air-lines', 'american-airlines', 'jetblue-airways','southwest-airlines')) %>% 
   ggplot(aes(x = airline_name, y = pct)) + geom_col(width = 0.4) + theme_bw() + 
   xlab('Airline') + ylab('Proportion Recommeding') + ylim(0,1) + 
@@ -52,9 +52,9 @@ airplanes$cabin_flown = relevel(airplanes$cabin_flown, "Economy")
 
 fit_cabin = glm(recommended ~ cabin_flown, data = airplanes, family = 'binomial')
 
-summary(fit_cabin) # rich people more likely to recommend the flight 
+summary(fit_cabin) # high_income people more likely to recommend the flight 
 
-airplanes = airplanes %>% mutate(rich = ifelse(cabin_flown %in% c('Economy', 'Premium Economy'), 0,1))
+airplanes = airplanes %>% mutate(high_income = ifelse(cabin_flown %in% c('Economy', 'Premium Economy'), 0,1))
 
 # can use this ^ as a variable in algos 
 
@@ -78,7 +78,7 @@ airplanes$boeing = grepl('[Bb]oeing',airplanes$aircraft) | grepl('[Bb]7', airpla
 
 airplanes = airplanes %>% mutate(reported_plane_type  = ifelse(boeing ==1 | airbus == 1 , 1,0))
 
-fit_plane = glm(recommended ~ reported_plane_type + rich, data = airplanes, family = 'binomial')
+fit_plane = glm(recommended ~ reported_plane_type + high_income, data = airplanes, family = 'binomial')
 
 summary(fit_plane)
 
@@ -103,9 +103,9 @@ train_id = sample(1:nrow(airplanes),floor(train_frac*nrow(airplanes)), replace =
 
 test_id = setdiff(1:nrow(airplanes), train_id)
 
-train = airplanes[train_id,] %>% select(us, rich, recommended)
+train = airplanes[train_id,] %>% select(us, high_income, recommended)
 
-test = airplanes[test_id,] %>% select(us,rich, recommended)
+test = airplanes[test_id,] %>% select(us,high_income, recommended)
 
 
 #################################
@@ -173,4 +173,13 @@ airplanes1 = airplanes %>% unnest_tokens(word, content) %>%
 airplanes1 %>% select(author,word, recommended) %>% group_by(author) %>% mutate(word_count = n()) %>% 
   distinct(author, word_count, recommended) %>% ungroup() %>% group_by(recommended) %>% 
   summarise(avg_word_count = mean(word_count))
+
+#########################
+####### save to RDS
+##########################
+
+# saveRDS(airplanes, file = "airplanes.rds")
+
+
+
 
