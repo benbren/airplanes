@@ -60,4 +60,8 @@ for(i in test_input){
   test_matrix_cov[1,pos] = 1
 }
 
-# TODO: need condition to add us, high_income into the matrix
+# assume us = 1, high_income = 0
+test_matrix_cov[1,3513] = 1
+test_matrix_cov[1,3514] = 0
+test_pred_cov = predict(rf_cov_model, test_matrix_cov)
+print(test_pred_cov)
