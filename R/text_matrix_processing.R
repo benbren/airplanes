@@ -3,6 +3,7 @@ library(tidytext) #text mining, unnesting
 library(tm) #text mining
 
 
+
 # load data -------------------------------------------------
 airplanes = readRDS(file = "airplanes.rds")
 air_tidy_cov = airplanes %>%
@@ -49,6 +50,9 @@ colnames(UNK) = "UNK"
 air_unk_matrix = cbind(air_dtm_matrix, UNK) # 41178 x 3512
 # air_unk_matrix is data for "train without covariates"
 
+# save this matrix 
+# saveRDS(air_unk_matrix,"air_unk_matrix.rds")
+
 # merge with covariates -------------------------------------------------
 air_unk_matrix_id = as.data.frame(air_unk_matrix) %>%
   mutate(ID = seq(1,dim(air_unk_matrix)[1]))
@@ -60,7 +64,8 @@ air_unk_matrix_cov = air_unk_matrix_cov %>% select(-ID)
 air_unk_matrix_cov = as.matrix(air_unk_matrix_cov) #M41177 x 3514
 # air_unk_matrix_cov is data for "train with covariates"
 
-
+# and also save this matrix, so we don't have to run this script again :) 
+# saveRDS(air_unk_matrix_cov, "air_unk_matrix_cov.rds")
 
 
 

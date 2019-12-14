@@ -2,13 +2,16 @@
 library(caret)
 library(doParallel)
 
-source("text_matrix_processing.R")
+#source("text_matrix_processing.R")
+air_unk_matrix = readRDS('air_unk_matrix.rds')
+air_unk_matrix_cov = readRDS('air_unk_matrix_cov.rds')
 
 # Train without covariates -------------------------------------------------
 # use air_unk_matrix (41177 x 3512)
 # split to train and test
 # fraction of data for training 
 train_frac = 0.75
+
 train_id = sample(1:nrow(air_unk_matrix),floor(train_frac*nrow(air_unk_matrix)), replace = F)
 test_id = setdiff(1:nrow(air_unk_matrix), train_id)
 
