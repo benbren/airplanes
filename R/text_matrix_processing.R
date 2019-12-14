@@ -28,9 +28,11 @@ air_word_count = air_bing %>%
 # extract outcome (recommended) -------------------------------------------------
 air_outcome = unique(air_bing[,c("ID", "recommended")])  # 41177 x 2
 
+# we should save this as well
+# saveRDS(air_outcome, 'air_outcome.rds')
+
 # extract covariates 
 air_covariates = unique(air_bing[,c("ID", "us", "high_income")]) # 41177 x 3
-
 
 # long to wide -------------------------------------------------
 air_dtm = air_bing %>%
