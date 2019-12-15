@@ -1,5 +1,6 @@
 library(tidyverse)
 library(e1071)
+library(doParallel)
 
 #source("text_matrix_processing.R")
 air_unk_matrix = readRDS('~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_unk_matrix.rds')
