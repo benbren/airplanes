@@ -2,10 +2,10 @@
 library(caret)
 library(doParallel)
 
-source("text_matrix_processing.R")
-# air_unk_matrix = readRDS('air_unk_matrix.rds')
-# air_unk_matrix_cov = readRDS('air_unk_matrix_cov.rds')
-# air_outcome = readRDS(file = "air_outcome.rds")
+# source("text_matrix_processing.R")
+air_unk_matrix = readRDS('air_unk_matrix.rds')
+air_unk_matrix_cov = readRDS('air_unk_matrix_cov.rds')
+air_outcome = readRDS(file = "air_outcome.rds")
 
 # Train without covariates -------------------------------------------------
 # use air_unk_matrix (41177 x 3512)
