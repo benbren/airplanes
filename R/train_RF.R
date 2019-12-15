@@ -2,7 +2,10 @@
 library(caret)
 library(doParallel)
 
+rds = getwd()
+setwd("../R")
 source("text_matrix_processing.R")
+setwd(rds)
 # air_unk_matrix = readRDS('air_unk_matrix.rds')
 # air_unk_matrix_cov = readRDS('air_unk_matrix_cov.rds')
 # air_outcome = readRDS(file = "air_outcome.rds")
@@ -11,7 +14,7 @@ source("text_matrix_processing.R")
 # use air_unk_matrix (41177 x 3512)
 # split to train and test
 # fraction of data for training 
-train_frac = 0.75
+train_frac = 0.01
 
 train_id = sample(1:nrow(air_unk_matrix),floor(train_frac*nrow(air_unk_matrix)), replace = F)
 test_id = setdiff(1:nrow(air_unk_matrix), train_id)
@@ -27,18 +30,18 @@ system.time({
   # Find out how many cores are available: 
   # detectCores()
   # Create cluster with desired number of cores: 
-  #cl = makeCluster(4)
-  # Register cluster: 
-  # registerDoParallel(cl)
+  cl = makeCluster(4)
+  #Register cluster: 
+  registerDoParallel(cl)
   # Find out how many cores are being used
-  # getDoParWorkers()
+  getDoParWorkers()
   air_rf = caret::train(x = train_x,
                         y = train_y,
-                        method = "ranger", # randon forest
+                        method = "parRF", # random forest
                         num.trees = 200,
                         trControl = caret::trainControl(method = "oob")) # resampling: out-of-bag
-  # stopCluster(cl)
-  # registerDoSEQ()
+  stopCluster(cl)
+  registerDoSEQ()
 })
 
 
@@ -61,11 +64,20 @@ test_x_cov = air_unk_matrix_cov[test_id,]  # 10295 x 3514
 
 # model fitting -------------------------------------------------
 system.time({
+  # Create cluster with desired number of cores: 
+  cl = makeCluster(4)
+  #Register cluster: 
+  registerDoParallel(cl)
+  # Find out how many cores are being used
+  getDoParWorkers()
   air_rf_cov = caret::train(x = train_x_cov,
                             y = train_y,
                             method = "ranger", # randon forest
                             num.trees = 200,
                             trControl = caret::trainControl(method = "oob")) # resampling: out-of-bag
+  
+  stopCluster(cl)
+  registerDoSEQ()
 })
 
 

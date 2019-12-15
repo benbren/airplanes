@@ -5,6 +5,7 @@ library(tm) #text mining
 
 
 # load data -------------------------------------------------
+setwd(rds)
 airplanes = readRDS(file = "airplanes.rds")
 air_tidy_cov = airplanes %>%
   mutate(ID = seq(1,dim(airplanes)[1])) %>%
