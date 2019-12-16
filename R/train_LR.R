@@ -14,7 +14,7 @@ air_outcome  = readRDS(file = "~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/a
 # split to train and test
 # fraction of data for training 
 
-train_frac = 0.01
+train_frac = 0.75
 
 train_id = sample(1:nrow(air_unk_matrix),floor(train_frac*nrow(air_unk_matrix)), replace = F)
 test_id = setdiff(1:nrow(air_unk_matrix), train_id)
@@ -57,9 +57,9 @@ system.time({
 
 
 # model test data -------------------------------------------------
-y_pred = predict(air_logistic, X_test)
+y_pred = ifelse(predict(air_logistic, X_test, family = binomial(), type = 'response') > 0.5,1,0)
 # confusion matrix -------------------------------------------------
-con.matrix = confusionMatrix(y_pred, X_test$outcome)
+con.matrix = caret::confusionMatrix(as.factor(y_pred), as.factor(X_test$outcome))
 print(con.matrix)
 # save the model to disk
 saveRDS(air_logistic, "logistic_model.rds")
@@ -108,9 +108,9 @@ system.time({
 
 
 # model test data -------------------------------------------------
-y_pred_cov = predict(air_logistic_cov, X_cov_test)
+y_pred_cov = ifelse(predict(air_logistic_cov, X_cov_test, family = binomial(), type = 'response') > 0.5,1,0)
 # confusion matrix -------------------------------------------------
-con_matrix_cov = confusionMatrix(y_pred_cov, X_cov_test$outcome)
+con_matrix_cov = confusionMatrix(as.factor(y_pred_cov), as.factor(X_cov_test$outcome))
 print(con_matrix_cov)
 # save the model to disk
 saveRDS(air_logistic_cov, "logistic_model_cov.rds")

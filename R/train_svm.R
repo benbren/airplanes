@@ -48,7 +48,7 @@ system.time({
 # model test data -------------------------------------------------
 y_pred = predict(air_svm, X_test)
 # confusion matrix -------------------------------------------------
-con.matrix = confusionMatrix(y_pred, X_test$outcome)
+con.matrix = caret::confusionMatrix(as.factor(y_pred), as.factor(X_test$outcome))
 print(con.matrix)
 # save the model to disk
 saveRDS(air_svm, "svm_model.rds")
@@ -90,9 +90,9 @@ system.time({
 })
 
 # model test data -------------------------------------------------
-y_pred_cov = predict(air_svm, X_test_cov)
+y_pred_cov = e1071::predict(air_svm, X_test_cov)
 # confusion matrix -------------------------------------------------
-con.matrix = confusionMatrix(y_pred_cov, X_test_cov$outcome)
+con.matrix = caret::confusionMatrix(y_pred_cov, X_test_cov$outcome)
 print(con.matrix)
 # save the model to disk
 saveRDS(air_svm_cov, "svm_model_cov.rds")

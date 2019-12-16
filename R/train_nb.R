@@ -11,12 +11,13 @@ air_outcome  = readRDS(file = "~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/a
 # split to train and test
 # fraction of data for training 
 
-train_frac = 0.01
+train_frac = 0.75
 
 train_id = sample(1:nrow(air_unk_matrix),floor(train_frac*nrow(air_unk_matrix)), replace = F)
 test_id = setdiff(1:nrow(air_unk_matrix), train_id)
 
 X = cbind.data.frame('outcome' = air_outcome$recommended, air_unk_matrix)
+X$outcome = factor(X$outcome)
 
 X_train = X[train_id,]
 X_test = X[test_id,]
@@ -44,9 +45,9 @@ system.time({
 })
 
 # model test data -------------------------------------------------
-y_pred = predict(air_nb, X_test)
+y_pred = predict(air_nb, X_test[,-1])
 # confusion matrix -------------------------------------------------
-con.matrix = confusionMatrix(y_pred, X_test$outcome)
+con.matrix = caret::confusionMatrix(as.factor(y_pred), as.factor(X_test$outcome))
 print(con.matrix)
 # save the model to disk
 saveRDS(air_nb, "nb_model.rds")
@@ -87,9 +88,9 @@ system.time({
 })
 
 # model test data -------------------------------------------------
-y_pred_cov = predict(air_nb, X_test_cov)
+y_pred_cov = predict(air_nb, X_test_cov[,-1])
 # confusion matrix -------------------------------------------------
-con.matrix = confusionMatrix(y_pred_cov, X_test_cov$outcome)
+con.matrix = caret::confusionMatrix(as.factor(y_pred_cov), as.factor(X_test_cov$outcome))
 print(con.matrix)
 # save the model to disk
 saveRDS(air_nb_cov, "nb_model_cov.rds")

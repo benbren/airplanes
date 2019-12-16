@@ -20,7 +20,7 @@ air_outcome = readRDS(file = "air_outcome.rds")
 # use air_unk_matrix (41177 x 3512)
 # split to train and test
 # fraction of data for training 
-train_frac = 0.01
+train_frac = 0.75
 
 train_id = sample(1:nrow(air_unk_matrix),floor(train_frac*nrow(air_unk_matrix)), replace = F)
 test_id = setdiff(1:nrow(air_unk_matrix), train_id)
@@ -41,8 +41,11 @@ system.time({
   registerDoParallel(cl)
   # Find out how many cores are being used
   getDoParWorkers()
-  air_rf = caret::train(x = train_x,
-                        y = train_y,
+  
+  f <- reformulate(setdiff(colnames(X_train), "outcome"), response="outcome")
+  
+  air_rf = caret::train(formula = f,
+                        data = X_train,
                         method = "parRF", # random forest
                         num.trees = 200,
                         trControl = caret::trainControl(method = "oob")) # resampling: out-of-bag
@@ -76,8 +79,10 @@ system.time({
   registerDoParallel(cl)
   # Find out how many cores are being used
   getDoParWorkers()
-  air_rf_cov = caret::train(x = train_x_cov,
-                            y = train_y,
+  
+  f <- reformulate(setdiff(colnames(X_cov_train), "outcome"), response="outcome")
+  
+  air_rf_cov = caret::train(formula = f,
                             method = "parRF", # randon forest
                             num.trees = 200,
                             trControl = caret::trainControl(method = "oob")) # resampling: out-of-bag
