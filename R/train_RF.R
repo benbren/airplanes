@@ -11,9 +11,9 @@ setwd(rds)
 # air_outcome = readRDS(file = "air_outcome.rds")
 
 # source("text_matrix_processing.R")
-air_unk_matrix = readRDS('air_unk_matrix.rds')
-air_unk_matrix_cov = readRDS('air_unk_matrix_cov.rds')
-air_outcome = readRDS(file = "air_outcome.rds")
+air_unk_matrix = readRDS('../rds/air_unk_matrix.rds')
+air_unk_matrix_cov = readRDS('../rds/air_unk_matrix_cov.rds')
+air_outcome = readRDS(file = "../rds/air_outcome.rds")
 
 
 # Train without covariates -------------------------------------------------
@@ -31,6 +31,8 @@ test_id = setdiff(1:nrow(air_unk_matrix), train_id)
 # test_y = factor(air_outcome$recommended)[test_id]
 
 X = cbind.data.frame('outcome' = air_outcome$recommended, air_unk_matrix)
+
+X$outcome <- as.factor(X$outcome)
 
 X_train = X[train_id,]
 X_test = X[test_id,]
@@ -80,8 +82,15 @@ saveRDS(air_rf, "rf_model.rds")
 
 # Train with covariates -------------------------------------------------
 # use air_unk_matrix_cov
-train_x_cov = air_unk_matrix_cov[train_id,]  # 30882 x 3514
-test_x_cov = air_unk_matrix_cov[test_id,]  # 10295 x 3514
+# train_x_cov = air_unk_matrix_cov[train_id,]  # 30882 x 3514
+# test_x_cov = air_unk_matrix_cov[test_id,]  # 10295 x 3514
+
+X_cov = cbind.data.frame('outcome' = air_outcome$recommended, air_unk_matrix_cov)
+
+X_cov$outcome <- X_cov$outcome
+
+X_train_cov = X_cov[train_id,]
+X_test_cov = X_cov[test_id]
 
 # model fitting -------------------------------------------------
 system.time({

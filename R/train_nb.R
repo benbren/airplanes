@@ -2,13 +2,13 @@ library(tidyverse)
 library(e1071)
 library(doParallel)
 #source("text_matrix_processing.R")
-air_unk_matrix = readRDS('~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_unk_matrix.rds')
-air_unk_matrix_cov = readRDS('~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_unk_matrix_cov.rds')
-air_outcome  = readRDS(file = "~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_outcome.rds")
+# air_unk_matrix = readRDS('~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_unk_matrix.rds')
+# air_unk_matrix_cov = readRDS('~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_unk_matrix_cov.rds')
+# air_outcome  = readRDS(file = "~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_outcome.rds")
 
-# air_unk_matrix = readRDS('air_unk_matrix.rds')
-# air_unk_matrix_cov = readRDS('air_unk_matrix_cov.rds')
-# air_outcome  = readRDS(file = "air_outcome.rds")
+air_unk_matrix = readRDS('../rds/air_unk_matrix.rds')
+air_unk_matrix_cov = readRDS('../rds/air_unk_matrix_cov.rds')
+air_outcome  = readRDS(file = "../rds/air_outcome.rds")
 
 # Train without covariates -------------------------------------------------
 # use air_unk_matrix (41177 x 3512)
@@ -21,6 +21,7 @@ train_id = sample(1:nrow(air_unk_matrix),floor(train_frac*nrow(air_unk_matrix)),
 test_id = setdiff(1:nrow(air_unk_matrix), train_id)
 
 X = cbind.data.frame('outcome' = air_outcome$recommended, air_unk_matrix)
+
 X$outcome = factor(X$outcome)
 
 X_train = X[train_id,]
@@ -65,6 +66,8 @@ saveRDS(air_nb, "nb_model.rds")
 train_frac = 0.75
 
 X_cov = cbind.data.frame('outcome' = air_outcome$recommended, air_unk_matrix_cov)
+
+X_cov$outcome <- X_cov$outcome
 
 X_train_cov = X_cov[train_id,]
 X_test_cov = X_cov[test_id]
