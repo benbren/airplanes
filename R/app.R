@@ -15,8 +15,14 @@ library(tm)
 library(glmnet)
 
 # load data, function
+<<<<<<< HEAD
 source("load_model.R")
 
+=======
+LR_cov_model = readRDS("../rds/logistic_model_cov.rds")
+col_names_cov = readRDS("../rds/col_names_cov.rds")
+col_names_cov[which(col_names_cov == "break")] = "brk"
+>>>>>>> 6760c2e36042c67a441eda2a7ac7a09ef9645789
 
 
 # airline list
