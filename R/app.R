@@ -12,14 +12,14 @@ library(shinydashboard)
 library(tidyverse)
 library(tidytext)
 library(tm)
-library(glmnet)
+# library(glmnet)
+library(e1071)
 
 # load data, function
-
-
-LR_cov_model = readRDS("../rds/logistic_model_cov.rds")
+svm_cov_model = readRDS("../rds/svm_model_cov.rds")
+# LR_cov_model = readRDS("../rds/logistic_model_cov.rds")
 col_names_cov = readRDS("../rds/col_names_cov.rds")
-col_names_cov[which(col_names_cov == "break")] = "brk"
+# col_names_cov[which(col_names_cov == "break")] = "brk"
 
 
 # airline list
@@ -113,9 +113,9 @@ server <- function(input, output){
         test_matrix = matrix(0, nrow = 1, ncol = length(col_names_cov))
         colnames(test_matrix) = col_names_cov
         for(i in test_input){
-            if (i == "break"){
-                i == "brk"
-            }
+            # if (i == "break"){
+            #     i == "brk"
+            # }
             pos = as.vector(grep(i, colnames(test_matrix)))[1]
             test_matrix[1,pos] = 1
         }
@@ -124,9 +124,9 @@ server <- function(input, output){
         test_matrix[1,3514] = rich_cat
         
         
-        result = ifelse(predict.glmnet(LR_cov_model, test_matrix, type="response") > 0.5,1,0)
+        # result = ifelse(predict.glmnet(LR_cov_model, test_matrix, type="response") > 0.5,1,0)
         
-        # result = predict(classifier, newdata = t(as.matrix(test)))
+        result = predict(svm_cov_model, newdata = test_matrix)
         if (as.vector(result) == 0){
             paste("Not recommend")
         } else {paste("Recommend!!")}
