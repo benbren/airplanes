@@ -69,7 +69,7 @@ train_frac = 0.75
 
 X_cov = cbind.data.frame('outcome' = air_outcome$recommended, air_unk_matrix_cov)
 
-X_cov$outcome <- X_cov$outcome
+X_cov$outcome <- as.factor(X_cov$outcome)
 
 X_train_cov = X_cov[train_id,]
 X_test_cov = X_cov[test_id,]
@@ -85,9 +85,9 @@ system.time({
   # Find out how many cores are being used
   getDoParWorkers()
   
-  f <- reformulate(setdiff(colnames(X_train_cov), "outcome"), response="outcome")
+  # f <- reformulate(setdiff(colnames(X_train_cov), "outcome"), response="outcome")
   
-  air_svm_cov = e1071::svm(formula = f, 
+  air_svm_cov = e1071::svm(formula = outcome ~ ., 
                        data = X_train_cov, 
                        type = 'C-classification', 
                        kernel = 'linear')

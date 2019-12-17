@@ -80,7 +80,7 @@ colnames(X_test) = original_col_names
 # Train without covariates -------------------------------------------------
 X_cov = cbind.data.frame('outcome' = air_outcome$recommended, air_unk_matrix_cov)
 
-X_cov$outcome <- X_cov$outcome
+X_cov$outcome <- as.factor(X_cov$outcome)
 
 X_cov_train = X_cov[train_id,]
 X_cov_test = X_cov[test_id,]
