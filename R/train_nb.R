@@ -30,6 +30,12 @@ X$outcome = factor(X$outcome)
 X_train = X[train_id,]
 X_test = X[test_id,]
 
+break_id = which(colnames(X_train) == 'break')  # can't have column names like 'next' or 'break' in glm
+
+
+# we had break, not next, so i changed this! 
+colnames(X_train)[break_id] = 'brk'
+colnames(X_test)[break_id] = 'brk'
 
 system.time({
   # Find out how many cores are available: 
@@ -74,6 +80,15 @@ X_cov$outcome <- as.factor(X_cov$outcome)
 
 X_train_cov = X_cov[train_id,]
 X_test_cov = X_cov[test_id,]
+
+break_cov_id = which(colnames(X_cov_train) == 'break')  # can't have column names like 'next' or 'break' in glm
+
+
+# we had break, not next, so i changed this! 
+colnames(X_cov_train)[break_id] = 'brk'
+colnames(X_cov_test)[break_id] = 'brk'
+
+
 
 
 system.time({
