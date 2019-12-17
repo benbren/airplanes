@@ -34,10 +34,10 @@ The dataset for this project
 ```{r, echo = FALSE}
 results_table <- 
     cbind(model = c("Naive Bayes", "Random Forest", "SVM", "Logistic Regression"),
-          rel_time = c(0, 0, 0, 7.21),
-          recall_score = c(0, 0, 0, 72.41),
-          prec_score = c(0, 0, 0, 89.25),
-          f1_score = c(0 ,0, 0, 79.95))
+          rel_time = c(0, 0, 619.76, 7.21),
+          recall_score = c(0, 0, 0, 0),
+          prec_score = c(0, 0, 0, 0),
+          f1_score = c(0 ,0, 0, 0))
 
 colnames(results_table) <- c("Model", "Time (s)",
                              "Recall", "Precision", "F1 Score")
