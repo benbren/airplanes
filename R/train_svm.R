@@ -72,7 +72,7 @@ X_cov = cbind.data.frame('outcome' = air_outcome$recommended, air_unk_matrix_cov
 X_cov$outcome <- X_cov$outcome
 
 X_train_cov = X_cov[train_id,]
-X_test_cov = X_cov[test_id]
+X_test_cov = X_cov[test_id,]
 
 
 system.time({
@@ -98,7 +98,7 @@ system.time({
 })
 
 # model test data -------------------------------------------------
-y_pred_cov = e1071::predict(air_svm, X_test_cov)
+y_pred_cov = e1071::predict(air_svm, X_test_cov[,-c(1)])
 # confusion matrix -------------------------------------------------
 con.matrix = caret::confusionMatrix(y_pred_cov, X_test_cov$outcome)
 print(con.matrix)

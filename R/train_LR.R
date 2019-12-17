@@ -118,7 +118,7 @@ system.time({
 
 
 # model test data -------------------------------------------------
-y_pred_cov = ifelse(predict(air_logistic_cov, X_cov_test, family = binomial(), type = 'response') > 0.5,1,0)
+y_pred_cov = ifelse(predict(air_logistic_cov, X_cov_test[,-c(1)], family = binomial(), type = 'response') > 0.5,1,0)
 # confusion matrix -------------------------------------------------
 con_matrix_cov = confusionMatrix(as.factor(y_pred_cov), as.factor(X_cov_test$outcome))
 print(con_matrix_cov)
