@@ -81,7 +81,7 @@ X_cov$outcome <- as.factor(X_cov$outcome)
 X_train_cov = X_cov[train_id,]
 X_test_cov = X_cov[test_id,]
 
-break_cov_id = which(colnames(X_cov_train) == 'break')  # can't have column names like 'next' or 'break' in glm
+break_cov_id = which(colnames(X_train_cov) == 'break')  # can't have column names like 'next' or 'break' in glm
 
 
 # we had break, not next, so i changed this! 
