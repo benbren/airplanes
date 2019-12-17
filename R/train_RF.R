@@ -25,11 +25,24 @@ train_frac = 0.75
 train_id = sample(1:nrow(air_unk_matrix),floor(train_frac*nrow(air_unk_matrix)), replace = F)
 test_id = setdiff(1:nrow(air_unk_matrix), train_id)
 
-train_x = air_unk_matrix[train_id,]  # 30882 x 3512
-train_y = factor(air_outcome$recommended)[train_id]
-test_x = air_unk_matrix[test_id,]  # 10295 x 3512
-test_y = factor(air_outcome$recommended)[test_id]
+# train_x = air_unk_matrix[train_id,]  # 30882 x 3512
+# train_y = factor(air_outcome$recommended)[train_id]
+# test_x = air_unk_matrix[test_id,]  # 10295 x 3512
+# test_y = factor(air_outcome$recommended)[test_id]
 
+X = cbind.data.frame('outcome' = air_outcome$recommended, air_unk_matrix)
+
+X_train = X[train_id,]
+X_test = X[test_id,]
+
+original_col_names = colnames(X_train) # save original column names 
+
+break_id = which(colnames(X_train) == 'break')  # can't have column names like 'next' or 'break' in glm
+
+
+# we had break, not next, so i changed this! 
+colnames(X_train)[break_id] = 'brk'
+colnames(X_test)[break_id] = 'brk'
 
 # model fitting -------------------------------------------------
 system.time({
@@ -42,10 +55,9 @@ system.time({
   # Find out how many cores are being used
   getDoParWorkers()
   
-  f <- reformulate(setdiff(colnames(X_train), "outcome"), response="outcome")
-  
-  air_rf = caret::train(formula = f,
-                        data = X_train,
+  # f <- reformulate(setdiff(colnames(X_train), "outcome"), response="outcome")
+  air_rf = caret::train(form = as.factor(outcome) ~ .,
+                        data = X_train[1:200,],
                         method = "parRF", # random forest
                         num.trees = 200,
                         trControl = caret::trainControl(method = "oob")) # resampling: out-of-bag
@@ -55,9 +67,9 @@ system.time({
 
 
 # model test data -------------------------------------------------
-y_pred = predict(air_rf, test_x)
+y_pred = predict(air_rf, X_test[100:200,c(-1)]) # outcome is at column one
 # confusion matrix -------------------------------------------------
-con.matrix = confusionMatrix(y_pred, test_y)
+con.matrix = confusionMatrix(as.factor(y_pred), as.factor(X_test[100:200,1]))
 print(con.matrix)
 # save the model to disk
 saveRDS(air_rf, "rf_model.rds")

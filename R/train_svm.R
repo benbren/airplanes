@@ -7,6 +7,10 @@ air_unk_matrix = readRDS('~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_un
 air_unk_matrix_cov = readRDS('~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_unk_matrix_cov.rds')
 air_outcome  = readRDS(file = "~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_outcome.rds")
 
+# air_unk_matrix = readRDS('air_unk_matrix.rds')
+# air_unk_matrix_cov = readRDS('air_unk_matrix_cov.rds')
+# air_outcome = readRDS(file = "air_outcome.rds")
+
 # Train without covariates -------------------------------------------------
 # use air_unk_matrix (41177 x 3512)
 # split to train and test
@@ -33,10 +37,10 @@ system.time({
   # Find out how many cores are being used
   getDoParWorkers()
   
-  f <- reformulate(setdiff(colnames(X_train), "outcome"), response="outcome")
+  # f <- reformulate(setdiff(colnames(X_train), "outcome"), response="outcome")
   
-  air_svm = e1071::svm(formula = f, 
-                            data = X_train, 
+  air_svm = e1071::svm(formula = as.factor(outcome) ~ ., 
+                            data = X_train[1:2000,], 
                             type = 'C-classification', 
                             kernel = 'linear')
   
@@ -46,9 +50,9 @@ system.time({
 })
 
 # model test data -------------------------------------------------
-y_pred = predict(air_svm, X_test)
+y_pred = predict(air_svm, X_test[100:200, c(-1)])
 # confusion matrix -------------------------------------------------
-con.matrix = caret::confusionMatrix(as.factor(y_pred), as.factor(X_test$outcome))
+con.matrix = caret::confusionMatrix(as.factor(y_pred), as.factor(X_test[100:200, 1]))
 print(con.matrix)
 # save the model to disk
 saveRDS(air_svm, "svm_model.rds")

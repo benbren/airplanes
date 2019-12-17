@@ -9,6 +9,10 @@ air_unk_matrix = readRDS('~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_un
 air_unk_matrix_cov = readRDS('~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_unk_matrix_cov.rds')
 air_outcome  = readRDS(file = "~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_outcome.rds")
 
+# air_unk_matrix = readRDS('air_unk_matrix.rds')
+# air_unk_matrix_cov = readRDS('air_unk_matrix_cov.rds')
+# air_outcome  = readRDS(file = "air_outcome.rds")
+
 # Train without covariates -------------------------------------------------
 # use air_unk_matrix (41177 x 3512)
 # split to train and test
@@ -47,7 +51,9 @@ system.time({
   
   f <- reformulate(setdiff(colnames(X_train), "outcome"), response="outcome")
   
-  air_logistic = glm(formula = f, data = X_train, family = 'binomial')
+  air_logistic = glm(formula = as.factor(outcome) ~ ., 
+                     data = X_train[1:500], 
+                     family = 'binomial')
   
   stopCluster(cl)
   registerDoSEQ()
@@ -57,7 +63,7 @@ system.time({
 
 
 # model test data -------------------------------------------------
-y_pred = ifelse(predict(air_logistic, X_test, family = binomial(), type = 'response') > 0.5,1,0)
+y_pred = ifelse(predict(air_logistic, X_test[100:200, -c(-1)], family = binomial(), type = 'response') > 0.5,1,0)
 # confusion matrix -------------------------------------------------
 con.matrix = caret::confusionMatrix(as.factor(y_pred), as.factor(X_test$outcome))
 print(con.matrix)

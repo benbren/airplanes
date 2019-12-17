@@ -6,6 +6,10 @@ air_unk_matrix = readRDS('~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_un
 air_unk_matrix_cov = readRDS('~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_unk_matrix_cov.rds')
 air_outcome  = readRDS(file = "~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_outcome.rds")
 
+# air_unk_matrix = readRDS('air_unk_matrix.rds')
+# air_unk_matrix_cov = readRDS('air_unk_matrix_cov.rds')
+# air_outcome  = readRDS(file = "air_outcome.rds")
+
 # Train without covariates -------------------------------------------------
 # use air_unk_matrix (41177 x 3512)
 # split to train and test
@@ -35,7 +39,7 @@ system.time({
   
   f <- reformulate(setdiff(colnames(X_train), "outcome"), response="outcome")
   
-  air_nb = e1071::naiveBayes(formula = f, 
+  air_nb = e1071::naiveBayes(formula = as.factor(outcome) ~ ., 
                        data = X_train) 
                        
   
