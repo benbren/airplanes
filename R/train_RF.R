@@ -67,7 +67,7 @@ system.time({
   air_rf = caret::train(form = as.factor(outcome) ~ .,
                         data = X_train,
                         method = "parRF", # random forest
-                        num.trees = 200,
+                        num.trees = 10,
                         trControl = caret::trainControl(method = "oob")) # resampling: out-of-bag
   stopCluster(cl)
   registerDoSEQ()
@@ -111,7 +111,7 @@ system.time({
   
   air_rf_cov = caret::train(formula = outcome ~ .,
                             method = "parRF", # randon forest
-                            num.trees = 200,
+                            num.trees = 10,
                             trControl = caret::trainControl(method = "oob")) # resampling: out-of-bag
   
   stopCluster(cl)
