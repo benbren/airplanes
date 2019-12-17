@@ -14,7 +14,7 @@ This is where our code is located. A quick overview of the scripts is as follows
 
 -   **app.R** : Code for the associated RShiny App.
 -   **attributes\_model.R** : Code for checking which non-text attributes were good predictors. Done with logistic regression.
--   **matrix\_text\_processing**: Turning the reviews of our data set into a functional Document-Term Matrix.
+-   **matrix\_text\_processing.R**: Turning the reviews of our data set into a functional Document-Term Matrix.
 -   **train\_lr\_glmnet.R**: Training and testing the Logistic Regression model.
 -   **train\_nb.R**: Training and testing the Naive Bayes model.
 -   **train\_svm.R**: Training adn testing the Support Vector Machine model.
