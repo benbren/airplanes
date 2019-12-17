@@ -35,7 +35,7 @@ The folder containg our final report in .Rmd format for this project (See this f
 Group Members
 -------------
 
--   **Tahmeed Tureen** *(<tureen@umich.edu>*
+-   **Tahmeed Tureen** *(<tureen@umich.edu>)*
 -   **Mandy Meng Ni Ho** *(<mandyho@umich.edu>)*
 -   **Ben Brennan** *(<brennben@umich.edu>)*
 
