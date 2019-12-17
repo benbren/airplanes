@@ -15,20 +15,17 @@ library(tm)
 library(glmnet)
 
 # load data, function
-<<<<<<< HEAD
-source("load_model.R")
 
-=======
+
 LR_cov_model = readRDS("../rds/logistic_model_cov.rds")
 col_names_cov = readRDS("../rds/col_names_cov.rds")
 col_names_cov[which(col_names_cov == "break")] = "brk"
->>>>>>> 6760c2e36042c67a441eda2a7ac7a09ef9645789
 
 
 # airline list
 # airline = c("Delta Airline", "American Airline", "United Airline", "Jetblue Airline")
 US = c("US", "Not US")
-Rich = c("Rich", "Poor")
+Rich = c("Economy", "Premium")
 
 # Define UI for application that draws a histogram
 header <- dashboardHeader(title = "Customer Review Prediction")
@@ -50,8 +47,8 @@ body <- dashboardBody(
         
         box(title = "Dropdown selection",
             #selectInput("selection_airline", label = "Select type of Airline", choices = airline),
-            selectInput("selection_country", label = "Select type of Cabin", choices = US),
-            selectInput("selection_income", label = "Select type of Traveller", choices = Rich),
+            selectInput("selection_country", label = "Select Country Category", choices = US),
+            selectInput("selection_income", label = "Select Cabin type", choices = Rich),
             status = "primary")
     ),
     
