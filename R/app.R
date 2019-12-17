@@ -15,8 +15,8 @@ library(tm)
 library(glmnet)
 
 # load data, function
-LR_cov_model = readRDS("./rds/logistic_model_cov.rds")
-col_names_cov = readRDS("./rds/col_names_cov.rds")
+LR_cov_model = readRDS("../rds/logistic_model_cov.rds")
+col_names_cov = readRDS("../rds/col_names_cov.rds")
 col_names_cov[which(col_names_cov == "break")] = "brk"
 
 
