@@ -57,7 +57,8 @@ system.time({
   air_logistic = glmnet(x = as.matrix(X_train[,-c(1)]), y = X_train$outcome, 
                      family = 'binomial',
                      alpha = 1,
-                     lambda = 0.01)
+                     lambda = 0.1,
+                     intercept = F)
   
   stopCluster(cl)
   registerDoSEQ()
@@ -118,7 +119,8 @@ system.time({
   air_logistic_cov = glmnet(x = as.matrix(X_cov_train[,-c(1)]), y = X_cov_train$outcome, 
                             family = 'binomial',
                             alpha = 1,
-                            lambda = 0.01)
+                            lambda = 0.1,
+                            intercept = F)
   
   stopCluster(cl)
   registerDoSEQ()
