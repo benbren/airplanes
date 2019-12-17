@@ -1,6 +1,9 @@
 
 library(caret)
 library(doParallel)
+library(randomForest)
+library(e1071)
+# library(import)
 
 # rds = getwd()
 # setwd("../R")

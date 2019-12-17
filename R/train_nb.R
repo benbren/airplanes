@@ -43,7 +43,7 @@ system.time({
   
   f <- reformulate(setdiff(colnames(X_train), "outcome"), response="outcome")
   
-  air_nb = e1071::naiveBayes(formula = as.factor(outcome) ~ ., 
+  air_nb = e1071::naiveBayes(formula = f, 
                        data = X_train) 
                        
   
@@ -88,7 +88,7 @@ system.time({
   
   f <- reformulate(setdiff(colnames(X_train_cov), "outcome"), response="outcome")
   
-  air_nb_cov = e1071::naiveBayes(formula = outcome ~ ., 
+  air_nb_cov = e1071::naiveBayes(formula = f, 
                            data = X_train_cov)
                            
   
