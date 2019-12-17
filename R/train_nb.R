@@ -15,10 +15,13 @@ air_outcome  = readRDS(file = "../rds/air_outcome.rds")
 # split to train and test
 # fraction of data for training 
 
-train_frac = 0.75
+# train_frac = 0.75
+# 
+# train_id = sample(1:nrow(air_unk_matrix),floor(train_frac*nrow(air_unk_matrix)), replace = F)
+# test_id = setdiff(1:nrow(air_unk_matrix), train_id)
 
-train_id = sample(1:nrow(air_unk_matrix),floor(train_frac*nrow(air_unk_matrix)), replace = F)
-test_id = setdiff(1:nrow(air_unk_matrix), train_id)
+train_id = readRDS("train_id.rds")
+test_id = readRDS("test_id.rds")
 
 X = cbind.data.frame('outcome' = air_outcome$recommended, air_unk_matrix)
 
@@ -85,7 +88,7 @@ system.time({
   
   f <- reformulate(setdiff(colnames(X_train_cov), "outcome"), response="outcome")
   
-  air_nb_cov = e1071::naiveBayes(formula = f, 
+  air_nb_cov = e1071::naiveBayes(formula = outcome ~ ., 
                            data = X_train_cov)
                            
   

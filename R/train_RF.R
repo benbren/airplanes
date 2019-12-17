@@ -20,10 +20,13 @@ air_outcome = readRDS(file = "../rds/air_outcome.rds")
 # use air_unk_matrix (41177 x 3512)
 # split to train and test
 # fraction of data for training 
-train_frac = 0.75
+# train_frac = 0.75
+# 
+# train_id = sample(1:nrow(air_unk_matrix),floor(train_frac*nrow(air_unk_matrix)), replace = F)
+# test_id = setdiff(1:nrow(air_unk_matrix), train_id)
 
-train_id = sample(1:nrow(air_unk_matrix),floor(train_frac*nrow(air_unk_matrix)), replace = F)
-test_id = setdiff(1:nrow(air_unk_matrix), train_id)
+train_id = readRDS("train_id.rds")
+test_id = readRDS("test_id.rds")
 
 # train_x = air_unk_matrix[train_id,]  # 30882 x 3512
 # train_y = factor(air_outcome$recommended)[train_id]
@@ -103,7 +106,7 @@ system.time({
   
   f <- reformulate(setdiff(colnames(X_train_cov), "outcome"), response="outcome")
   
-  air_rf_cov = caret::train(formula = f,
+  air_rf_cov = caret::train(formula = outcome ~ .,
                             method = "parRF", # randon forest
                             num.trees = 200,
                             trControl = caret::trainControl(method = "oob")) # resampling: out-of-bag
