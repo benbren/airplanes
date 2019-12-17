@@ -5,9 +5,9 @@ library(doParallel)
 
 
 #source("text_matrix_processing.R")
-air_unk_matrix = readRDS('~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_unk_matrix.rds')
-air_unk_matrix_cov = readRDS('~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_unk_matrix_cov.rds')
-air_outcome  = readRDS(file = "~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_outcome.rds")
+air_unk_matrix = readRDS('../rds/air_unk_matrix.rds')
+air_unk_matrix_cov = readRDS('../rds/air_unk_matrix_cov.rds')
+air_outcome  = readRDS(file = "../rds/air_outcome.rds")
 
 # air_unk_matrix = readRDS('air_unk_matrix.rds')
 # air_unk_matrix_cov = readRDS('air_unk_matrix_cov.rds')
