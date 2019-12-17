@@ -85,8 +85,8 @@ break_cov_id = which(colnames(X_cov_train) == 'break')  # can't have column name
 
 
 # we had break, not next, so i changed this! 
-colnames(X_cov_train)[break_id] = 'brk'
-colnames(X_cov_test)[break_id] = 'brk'
+colnames(X_train_cov)[break_id] = 'brk'
+colnames(X_test_cov)[break_id] = 'brk'
 
 
 
