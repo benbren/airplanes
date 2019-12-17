@@ -80,7 +80,7 @@ colnames(X_test) = original_col_names
 # Train without covariates -------------------------------------------------
 X_cov = cbind.data.frame('outcome' = air_outcome$recommended, air_unk_matrix_cov)
 
-X_cov$outcome <- X_cov$outcome
+X_cov$outcome <- as.factor(X_cov$outcome)
 
 X_cov_train = X_cov[train_id,]
 X_cov_test = X_cov[test_id,]
@@ -118,7 +118,7 @@ system.time({
 
 
 # model test data -------------------------------------------------
-y_pred_cov = ifelse(predict(air_logistic_cov, X_cov_test, family = binomial(), type = 'response') > 0.5,1,0)
+y_pred_cov = ifelse(predict(air_logistic_cov, X_cov_test[,-c(1)], family = binomial(), type = 'response') > 0.5,1,0)
 # confusion matrix -------------------------------------------------
 con_matrix_cov = confusionMatrix(as.factor(y_pred_cov), as.factor(X_cov_test$outcome))
 print(con_matrix_cov)

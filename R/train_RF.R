@@ -87,10 +87,10 @@ saveRDS(air_rf, "rf_model.rds")
 
 X_cov = cbind.data.frame('outcome' = air_outcome$recommended, air_unk_matrix_cov)
 
-X_cov$outcome <- X_cov$outcome
+X_cov$outcome <- as.factor(X_cov$outcome)
 
 X_train_cov = X_cov[train_id,]
-X_test_cov = X_cov[test_id]
+X_test_cov = X_cov[test_id,]
 
 # model fitting -------------------------------------------------
 system.time({
@@ -101,7 +101,7 @@ system.time({
   # Find out how many cores are being used
   getDoParWorkers()
   
-  f <- reformulate(setdiff(colnames(X_cov_train), "outcome"), response="outcome")
+  f <- reformulate(setdiff(colnames(X_train_cov), "outcome"), response="outcome")
   
   air_rf_cov = caret::train(formula = f,
                             method = "parRF", # randon forest
@@ -114,9 +114,9 @@ system.time({
 
 
 # model test data -------------------------------------------------
-y_pred_cov = predict(air_rf_cov, test_x_cov)
+y_pred_cov = predict(air_rf_cov, X_test_cov[,-c(1)])
 # confusion matrix -------------------------------------------------
-con_matrix_cov = confusionMatrix(y_pred_cov, test_y)
+con_matrix_cov = confusionMatrix(y_pred_cov, X_test_cov[,1])
 print(con_matrix_cov)
 # save the model to disk
 saveRDS(air_rf_cov, "rf_cov_model.rds")
