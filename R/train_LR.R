@@ -54,7 +54,7 @@ system.time({
   f <- reformulate(setdiff(colnames(X_train), "outcome"), response="outcome")
   
   air_logistic = glm(formula = as.factor(outcome) ~ ., 
-                     data = X_train[1:500], 
+                     data = X_train, 
                      family = 'binomial')
   
   stopCluster(cl)
@@ -65,7 +65,7 @@ system.time({
 
 
 # model test data -------------------------------------------------
-y_pred = ifelse(predict(air_logistic, X_test[100:200, -c(-1)], family = binomial(), type = 'response') > 0.5,1,0)
+y_pred = ifelse(predict(air_logistic, X_test[, -c(-1)], family = binomial(), type = 'response') > 0.5,1,0)
 # confusion matrix -------------------------------------------------
 con.matrix = caret::confusionMatrix(as.factor(y_pred), as.factor(X_test$outcome))
 print(con.matrix)

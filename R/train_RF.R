@@ -59,7 +59,7 @@ system.time({
   
   # f <- reformulate(setdiff(colnames(X_train), "outcome"), response="outcome")
   air_rf = caret::train(form = as.factor(outcome) ~ .,
-                        data = X_train[1:200,],
+                        data = X_train,
                         method = "parRF", # random forest
                         num.trees = 200,
                         trControl = caret::trainControl(method = "oob")) # resampling: out-of-bag
@@ -69,9 +69,9 @@ system.time({
 
 
 # model test data -------------------------------------------------
-y_pred = predict(air_rf, X_test[100:200,c(-1)]) # outcome is at column one
+y_pred = predict(air_rf, X_test[,c(-1)]) # outcome is at column one
 # confusion matrix -------------------------------------------------
-con.matrix = confusionMatrix(as.factor(y_pred), as.factor(X_test[100:200,1]))
+con.matrix = confusionMatrix(as.factor(y_pred), as.factor(X_test[,1]))
 print(con.matrix)
 # save the model to disk
 saveRDS(air_rf, "rf_model.rds")
