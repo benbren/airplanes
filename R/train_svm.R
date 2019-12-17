@@ -24,8 +24,8 @@ air_outcome = readRDS(file = "../rds/air_outcome.rds")
 # saveRDS(train_id, "train_id.rds")
 # saveRDS(test_id, "test_id.rds")
 
-train_id = readRDS("train_id.rds")
-test_id = readRDS("test_id.rds")
+train_id = readRDS("../rds/train_id.rds")
+test_id = readRDS("../rds/test_id.rds")
 
 X = cbind.data.frame('outcome' = air_outcome$recommended, air_unk_matrix)
 

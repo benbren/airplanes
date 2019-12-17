@@ -23,8 +23,8 @@ air_outcome  = readRDS(file = "../rds/air_outcome.rds")
 # train_id = sample(1:nrow(air_unk_matrix),floor(train_frac*nrow(air_unk_matrix)), replace = F)
 # test_id = setdiff(1:nrow(air_unk_matrix), train_id)
 
-train_id = readRDS("train_id.rds")
-test_id = readRDS("test_id.rds")
+train_id = readRDS("../rds/train_id.rds")
+test_id = readRDS("../rds/test_id.rds")
 
 X = cbind.data.frame('outcome' = air_outcome$recommended, air_unk_matrix)
 
