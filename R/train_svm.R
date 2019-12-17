@@ -98,7 +98,7 @@ system.time({
 })
 
 # model test data -------------------------------------------------
-y_pred_cov = e1071::predict(air_svm, X_test_cov[,-c(1)])
+y_pred_cov = predict(air_svm, X_test_cov[,-c(1)])
 # confusion matrix -------------------------------------------------
 con.matrix = caret::confusionMatrix(y_pred_cov, X_test_cov$outcome)
 print(con.matrix)
