@@ -82,11 +82,11 @@ colnames(X_test) = original_col_names
 # Train without covariates -------------------------------------------------
 X_cov = cbind.data.frame('outcome' = air_outcome$recommended, air_unk_matrix_cov)
 
-for(i in 1:ncol(X_cov)){
-  
-  X_cov[,i] = as.factor(X_cov[,i])
-  print(i)
-}
+# for(i in 1:ncol(X_cov)){
+#   
+#   X_cov[,i] = as.factor(X_cov[,i])
+#   print(i)
+# }
 
 X_cov_train = X_cov[train_id,]
 X_cov_test = X_cov[test_id,]
