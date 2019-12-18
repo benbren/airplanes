@@ -1,0 +1,10 @@
+name: shiny
+title:
+username:
+account: ben-brennan
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1610457
+bundleId: 2679331
+url: https://ben-brennan.shinyapps.io/shiny/
+when: 1576702968.01953

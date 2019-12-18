@@ -12,13 +12,22 @@ R/
 
 This is where our code is located. A quick overview of the scripts is as follows:
 
--   **app.R** : Code for the associated RShiny App.
 -   **attributes\_model.R** : Code for checking which non-text attributes were good predictors. Done with logistic regression.
 -   **matrix\_text\_processing.R**: Turning the reviews of our data set into a functional Document-Term Matrix.
 -   **train\_lr\_glmnet.R**: Training and testing the Logistic Regression model.
 -   **train\_nb.R**: Training and testing the Naive Bayes model.
 -   **train\_svm.R**: Training adn testing the Support Vector Machine model.
 -   **train\_rf.R**: Training the Random Forest model.
+
+### shiny/
+
+This folder has the code and data corresponding to the Shiny application associated with this project. This app is not deployed on shinyapps.io as the memory usage (model, document term matrix, data manipulation, etc.) is too much for the free plan - and we prefer not to pay for the full plan for this project! Hopefully, in the future, we can optimize the memory usage of the app so that we can deploy it using the free plan. However, you can still run the app!
+
+``` r
+shiny::runGitHub('airplanes','benbren', subdir = 'shiny')
+```
+
+This should open a window that allows you to use the app in its current form, assuming you have the shiny package installed. If not - do so, and this will work.
 
 ### rds/
 
