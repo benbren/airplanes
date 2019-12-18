@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-Project
-=======
+Biostat 625 Final Project: Group 6
+==================================
 
 <!-- badges: start -->
 <!-- badges: end -->
