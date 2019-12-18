@@ -1,0 +1,12 @@
+name: airline_customer_review
+title: airline_customer_review
+username:
+account: mandyho
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1610309
+bundleId: 2679195
+url: https://mandyho.shinyapps.io/airline_customer_review/
+when: 1576698942.83512
+asMultiple: FALSE
+asStatic: FALSE
