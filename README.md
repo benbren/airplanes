@@ -39,7 +39,7 @@ Contains the results from all the training scripts in **R/** after they were run
 
 ### report/
 
-The folder containg our final report in .Rmd format for this project (See this for more details on the project)
+The folder containing our final report in .Rmd format for this project (See this for more details on the project)
 
 Group Members
 -------------
