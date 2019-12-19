@@ -73,7 +73,7 @@ y_pred = ifelse(predict(air_logistic, as.matrix(X_test[,-c(1)]), s = 0.01) > 0.5
 con.matrix = caret::confusionMatrix(as.factor(y_pred), as.factor(X_test$outcome))
 print(con.matrix)
 # save the model to disk
-saveRDS(air_logistic, "logistic_model.rds")
+saveRDS(air_logistic, "logistic_model_Ridge.rds")
 
 # restore the matrices to their original form ----------- 
 colnames(X_train) = original_col_names
@@ -134,6 +134,6 @@ y_pred_cov = ifelse(predict(air_logistic_cov, as.matrix(X_cov_test[,-c(1)])) > 0
 con_matrix_cov = confusionMatrix(as.factor(y_pred_cov), as.factor(X_cov_test$outcome))
 print(con_matrix_cov)
 # save the model to disk
-saveRDS(air_logistic_cov, "logistic_model_cov.rds")
+saveRDS(air_logistic_cov, "logistic_model__Ridge_cov.rds")
 
 
