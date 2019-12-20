@@ -57,7 +57,7 @@ This is where our data is saved. Many of the datasets were taking too long to lo
 
 Contains the results from all the training scripts in **R/** after they were run on the cluster. 
 
-### Cluster_Job_File / 
+### Cluster_Job_Files/ 
 
 Contains the .slurm files submitted to the cluster for training of the algorithms. 
 
