@@ -1,0 +1,217 @@
+
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(tidyverse)
+── Attaching packages ─────────────────────────────────────── tidyverse 1.2.1 ──
+✔ ggplot2 3.1.1       ✔ purrr   0.3.2  
+✔ tibble  2.1.1       ✔ dplyr   0.8.0.1
+✔ tidyr   0.8.3       ✔ stringr 1.4.0  
+✔ readr   1.3.1       ✔ forcats 0.4.0  
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+> library(e1071)
+> library(doParallel)
+Loading required package: foreach
+
+Attaching package: ‘foreach’
+
+The following objects are masked from ‘package:purrr’:
+
+    accumulate, when
+
+Loading required package: iterators
+Loading required package: parallel
+> 
+> #source("text_matrix_processing.R")
+> # air_unk_matrix = readRDS('~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_unk_matrix.rds')
+> # air_unk_matrix_cov = readRDS('~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_unk_matrix_cov.rds')
+> # air_outcome  = readRDS(file = "~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_outcome.rds")
+> 
+> air_unk_matrix = readRDS('../rds/air_unk_matrix.rds')
+> air_unk_matrix_cov = readRDS('../rds/air_unk_matrix_cov.rds')
+> air_outcome = readRDS(file = "../rds/air_outcome.rds")
+> 
+> # Train without covariates -------------------------------------------------
+> # use air_unk_matrix (41177 x 3512)
+> # split to train and test
+> # fraction of data for training 
+> 
+> # train_frac = 0.75
+> 
+> # train_id = sample(1:nrow(air_unk_matrix),floor(train_frac*nrow(air_unk_matrix)), replace = F)
+> # test_id = setdiff(1:nrow(air_unk_matrix), train_id)
+> 
+> # saveRDS(train_id, "train_id.rds")
+> # saveRDS(test_id, "test_id.rds")
+> 
+> train_id = readRDS("../rds/train_id.rds")
+> test_id = readRDS("../rds/test_id.rds")
+> 
+> X = cbind.data.frame('outcome' = air_outcome$recommended, air_unk_matrix)
+> 
+> X$outcome <- as.factor(X$outcome)
+> 
+> X_train = X[train_id,]
+> X_test = X[test_id,]
+> 
+> 
+> system.time({
++   # Find out how many cores are available: 
++   # detectCores()
++   # Create cluster with desired number of cores: 
++   cl = makeCluster(4)
++   # Register cluster: 
++   registerDoParallel(cl)
++   # Find out how many cores are being used
++   getDoParWorkers()
++   
++   # f <- reformulate(setdiff(colnames(X_train), "outcome"), response="outcome")
++   
++   air_svm = e1071::svm(formula = as.factor(outcome) ~ ., 
++                             data = X_train, 
++                             type = 'C-classification', 
++                             kernel = 'linear')
++   
++   stopCluster(cl)
++   registerDoSEQ()
++   
++ })
+   user  system elapsed 
+261.071  27.930 452.923 
+Warning message:
+In svm.default(x, y, scale = scale, ..., na.action = na.action) :
+  Variable(s) ‘saggy’ and ‘bashing’ and ‘oppressive’ and ‘obstructing’ and ‘uphold’ and ‘torturing’ and ‘tenacity’ and ‘desultory’ and ‘worrisome’ and ‘commotion’ and ‘prisoner’ and ‘unsustainable’ and ‘brainless’ and ‘survival’ and ‘involuntarily’ and ‘sensational’ and ‘damned’ and ‘suicide’ and ‘miscalculation’ and ‘emphatic’ and ‘trusting’ and ‘unfit’ and ‘favored’ and ‘unconvincingly’ and ‘flattering’ and ‘sabotage’ and ‘auspicious’ and ‘joyfully’ and ‘foolishness’ and ‘unsavory’ and ‘resourceful’ and ‘joyous’ and ‘depression’ and ‘unjustifiable’ and ‘hug’ and ‘misreading’ and ‘beckoning’ and ‘peeved’ and ‘prejudice’ and ‘encroachment’ and ‘heartwarming’ and ‘cure’ and ‘unprofitable’ and ‘worsen’ and ‘groundless’ and ‘harangue’ and ‘responsibly’ and ‘succeeds’ and ‘frightful’ and ‘insultin [... truncated]
+> 
+> # model test data -------------------------------------------------
+> y_pred = predict(air_svm, X_test[, c(-1)])
+> # confusion matrix -------------------------------------------------
+> con.matrix = caret::confusionMatrix(as.factor(y_pred), as.factor(X_test[, 1]))
+> print(con.matrix)
+Confusion Matrix and Statistics
+
+          Reference
+Prediction    0    1
+         0 3935  699
+         1  837 4824
+                                          
+               Accuracy : 0.8508          
+                 95% CI : (0.8438, 0.8576)
+    No Information Rate : 0.5365          
+    P-Value [Acc > NIR] : < 2.2e-16       
+                                          
+                  Kappa : 0.6994          
+                                          
+ Mcnemar's Test P-Value : 0.000473        
+                                          
+            Sensitivity : 0.8246          
+            Specificity : 0.8734          
+         Pos Pred Value : 0.8492          
+         Neg Pred Value : 0.8521          
+             Prevalence : 0.4635          
+         Detection Rate : 0.3822          
+   Detection Prevalence : 0.4501          
+      Balanced Accuracy : 0.8490          
+                                          
+       'Positive' Class : 0               
+                                          
+> # save the model to disk
+> saveRDS(air_svm, "svm_model.rds")
+> 
+> 
+> #  Train with covariates -------------------------------------------------
+>   # use air_unk_matrix_cov (41177 x 3512)
+>   # split to train and test
+>   # fraction of data for training 
+>   
+> train_frac = 0.75
+> 
+> X_cov = cbind.data.frame('outcome' = air_outcome$recommended, air_unk_matrix_cov)
+> 
+> X_cov$outcome <- as.factor(X_cov$outcome)
+> 
+> X_train_cov = X_cov[train_id,]
+> X_test_cov = X_cov[test_id,]
+> 
+> 
+> system.time({
++   # Find out how many cores are available: 
++   # detectCores()
++   # Create cluster with desired number of cores: 
++   cl = makeCluster(4)
++   # Register cluster: 
++   registerDoParallel(cl)
++   # Find out how many cores are being used
++   getDoParWorkers()
++   
++   # f <- reformulate(setdiff(colnames(X_train_cov), "outcome"), response="outcome")
++   
++   air_svm_cov = e1071::svm(formula = outcome ~ ., 
++                        data = X_train_cov, 
++                        type = 'C-classification', 
++                        kernel = 'linear')
++   
++   stopCluster(cl)
++   registerDoSEQ()
++   
++ })
+   user  system elapsed 
+308.461  51.222 619.759 
+Warning message:
+In svm.default(x, y, scale = scale, ..., na.action = na.action) :
+  Variable(s) ‘saggy’ and ‘bashing’ and ‘oppressive’ and ‘obstructing’ and ‘uphold’ and ‘torturing’ and ‘tenacity’ and ‘desultory’ and ‘worrisome’ and ‘commotion’ and ‘prisoner’ and ‘unsustainable’ and ‘brainless’ and ‘survival’ and ‘involuntarily’ and ‘sensational’ and ‘damned’ and ‘suicide’ and ‘miscalculation’ and ‘emphatic’ and ‘trusting’ and ‘unfit’ and ‘favored’ and ‘unconvincingly’ and ‘flattering’ and ‘sabotage’ and ‘auspicious’ and ‘joyfully’ and ‘foolishness’ and ‘unsavory’ and ‘resourceful’ and ‘joyous’ and ‘depression’ and ‘unjustifiable’ and ‘hug’ and ‘misreading’ and ‘beckoning’ and ‘peeved’ and ‘prejudice’ and ‘encroachment’ and ‘heartwarming’ and ‘cure’ and ‘unprofitable’ and ‘worsen’ and ‘groundless’ and ‘harangue’ and ‘responsibly’ and ‘succeeds’ and ‘frightful’ and ‘insultin [... truncated]
+> 
+> # model test data -------------------------------------------------
+> y_pred_cov = predict(air_svm, X_test_cov[,-c(1)])
+> # confusion matrix -------------------------------------------------
+> con.matrix = caret::confusionMatrix(y_pred_cov, X_test_cov$outcome)
+> print(con.matrix)
+Confusion Matrix and Statistics
+
+          Reference
+Prediction    0    1
+         0 3935  699
+         1  837 4824
+                                          
+               Accuracy : 0.8508          
+                 95% CI : (0.8438, 0.8576)
+    No Information Rate : 0.5365          
+    P-Value [Acc > NIR] : < 2.2e-16       
+                                          
+                  Kappa : 0.6994          
+                                          
+ Mcnemar's Test P-Value : 0.000473        
+                                          
+            Sensitivity : 0.8246          
+            Specificity : 0.8734          
+         Pos Pred Value : 0.8492          
+         Neg Pred Value : 0.8521          
+             Prevalence : 0.4635          
+         Detection Rate : 0.3822          
+   Detection Prevalence : 0.4501          
+      Balanced Accuracy : 0.8490          
+                                          
+       'Positive' Class : 0               
+                                          
+> # save the model to disk
+> saveRDS(air_svm_cov, "svm_model_cov.rds")
+> 
+> proc.time()
+    user   system  elapsed 
+ 628.548   98.496 1565.651 
