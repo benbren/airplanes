@@ -46,13 +46,13 @@ This is where our data is saved. Many of the datasets were taking too long to lo
 
 Contains the results from all the training scripts in **R/** after they were run on the cluster.
 
-### Cluster\_Job\_File /
+### Cluster\_Job\_Files/
 
 Contains the .slurm files submitted to the cluster for training of the algorithms.
 
 ### report/
 
-The folder containing our final report in both .Rmd and PDF format for this project (See this for more details on the project)
+The folder containing our final report in both R Markdown and PDF format for this project (See this for more details on the project).
 
 Group Members
 -------------
