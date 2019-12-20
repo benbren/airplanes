@@ -5,8 +5,8 @@ library(tm) #text mining
 
 
 # load data -------------------------------------------------
-setwd(rds)
-airplanes = readRDS(file = "airplanes.rds")
+# setwd(rds)
+airplanes = readRDS(file = "../rds/airplanes.rds")
 air_tidy_cov = airplanes %>%
   mutate(ID = seq(1,dim(airplanes)[1])) %>%
   tidytext::unnest_tokens(word, content) %>%
