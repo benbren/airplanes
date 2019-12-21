@@ -45,10 +45,9 @@ By joining our attribute predictors to our DTM, we obtained a dataset that was a
 
 ## Methodology
 
-The dataset provides both the input of the model as well as the output, therefore, we consider four supervised learning algorithms to create our classification model: (i) Naive Bayes Classifier, (ii) Logistic Regression, (iii) Support Vector Machines, and (iv) Random Forest. The Naive Bayes Classifier is the most easy-to-use algorithm when it comes to textual data classification (citation 1). It is a probabilistic classifier based on the Bayes Theorem and we use this as our baseline classifier. Logistic Regression is a regression-based model that allows us to model the probability of a customer's recommendation (citation 2). For the Logistic Regression, we consider a Lasso Logistic Regression without an intercept and one with an intercept. Applying the lasso shrinkage, we get to shrink the effects of low-importance words in our regression model to exactly zero. Support Vector Machine (SVM) is a discriminative classifier that uses hyperplanes in Euclidean spaces to separate datapoints into separate classes (citation 3). For our SVM, we used a linear kernel and allowed for shrinkage. Random Forest is an ensemble tree-based learning method that constructes multiple decision trees which can collectively used for classification tasks (see Citation). The discussion of how these algorithms work from a mathematical perspective is beyond the scope of this project report, however, we provided references at the end of this document. To compare and assess these models, we take a training-testing approach with recall, precision, and F1 scores as our evaluation metrics. The statistical computing was performed using ```R``` (packages: ```caret```, ```e1071```, ```randomForest```, ```glmnet```). As for the interactive dashboard, we use the ```shiny``` package in ```R``` to develop a Shiny application.
+The dataset provides both the input of the model as well as the output, therefore, we consider four supervised learning algorithms to create our classification model: (i) Naive Bayes Classifier, (ii) Logistic Regression, (iii) Support Vector Machines, and (iv) Random Forest. The Naive Bayes Classifier is the most easy-to-use algorithm when it comes to textual data classification (citation 1). It is a probabilistic classifier based on the Bayes Theorem and we use this as our baseline classifier. Logistic Regression is a regression-based model that allows us to model the probability of a customer's recommendation (citation 2). For the Logistic Regression, we consider a Lasso Logistic Regression without an intercept and one with an intercept. Applying the lasso shrinkage, we get to shrink the effects of low-importance words in our regression model to exactly zero. Support Vector Machine (SVM) is a discriminative classifier that uses hyperplanes in Euclidean spaces to separate datapoints into separate classes (citation 3). For our SVM, we used a linear kernel and allowed for shrinkage. Random Forest is an ensemble tree-based learning method that constructes multiple decision trees which can collectively used for classification tasks (see Citation). For all four of the models, we added two adjusting variables: US Citizen (1 = yes, 0 = no) and Flight Class (First, Business, and Economy). The discussion of how these algorithms work from a mathematical perspective is beyond the scope of this project report, however, we provide references at the end of this document. To assess and compare these models, we take a training-testing approach with recall, precision, specificty, and F1 scores as our evaluation metrics. The statistical computing was performed using ```R``` (packages: ```caret```, ```e1071```, ```randomForest```, ```glmnet```). We also compared the run time for each of the model's training using the ```system.time()``` functionality. As for the interactive dashboard, we use the ```shiny``` package in ```R``` to develop a Shiny application.
 
 ## Computational Challenges
-
 
 We attempted to train our models on our personal laptops (both Mac and P.C.). However, due to the large amounts of data particulary the large number of dependent variables ($X_{word_{i}}$) we were either not able to succesfully train our models (timeout or memory errors). Therefore, we subset the dataset to a smaller number of reviews and re-trained our models to assess if our code was running appropriately.
 
@@ -64,9 +63,9 @@ Based on the predictive analysis on the test set (n = ), we found that Support V
 results_table <- 
     cbind(model = c("Naive Bayes", "Logistic Regression w/ Lasso", "Logistic Reg. w/ Lasso (No. Intercept)", "Support Vector Machines"),
           rel_time = c(0, 0, 0, 0),
-          recall_score = c(0, 0, 0, 0),
-          prec_score = c(0, 0, 0, 0),
-          f1_score = c(0 ,0, 0, 0))
+          recall_score = c(99.91, 72.41, 75.83, 87.34),
+          prec_score = c(53.79, 88.63, 87.80, 85.21),
+          f1_score = c(69.93, 0, 0, 0))
 
 colnames(results_table) <- c("Model", "Time (sec)",
                              "Recall (%)", "Precision (%)", "F1 Score (%)")
@@ -76,7 +75,7 @@ kable(results_table)
 
 ### Shiny Application
 
-The Shiny application can be viewed by running this command on the ```R``` console: . It is important to note that the ```shiny``` package must be first insalled before this app can be run. We provide an illustration of what the dashboard looks like below.
+The Shiny application can be viewed by running this command, ```shiny::runGitHub('airplanes','benbren', subdir = 'shiny')```, on the ```R``` console: . It is important to note that the ```shiny``` package must first be installed before this app can be run. We provide an illustration of what the dashboard looks like below.
 
 ### Discussion
 
