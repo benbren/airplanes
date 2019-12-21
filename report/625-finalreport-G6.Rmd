@@ -32,8 +32,14 @@ In this project, we spin a scenario where we are Data Science consultants at a w
 ### Raw Data
 
 The dataset for this project is provided by Skytrax, a United Kingdom based consulting group that specializes in airline and airport reviews. This dataset consists of 41,396 observations with attributes such as customer review regarding flight, customer's country of origin, customer's ratings (i.e. overall, seat comfort, cabin staff rating etc.), customer's seat type (i.e. Business, Economy etc.) and finally a variable that represents whether or not a customer had recommended the airline after their review. The customer recommendation (variable name : ```recommended```) is a binary variable and is the primary outcome of interest in this project. As discussed earlier, the objective of this goal is to create a model that can predict whether a customer will or will not recommend an airline. Therefore, the attribute holding the customer reviews is the main dependent variable in our analyses (variable name : ```content```).
+\newpage 
 
 ### Data Processing
+
+Data preprocessing for this project required two steps. The first was to include meaningful covariates that were not included in content. In essence, we needed to answer the question: Is there anything outside of the review ( ```content```) that is significantly associated with whether or not an individual is going to recommend the airline? After answering this question, we are then able to understand how to process the non-review part of our data to make it efficient in our alogrithms. \par 
+To answer this question, we used simple logistic regression to assess significance of certain covariates on the reccomendation. First, we excluded all *rating* variables (i.e. overall rating. wi-fi rating, food rating) as we felt the project would be too easy if we included those variables. We mainly focused on country of interest, type of traveller and what class the traveller was traveling in. We found, in our data set, that solo travellers were more likely to recommend the airline - but there was also about 39,000 missing values for this covariate, so it was not included. We found that a person from the US, as opposed to someone not from the US, is much less likely to recommend an airline. Furthermore, we found that if a person was flying first class or business class, they were more likely to recommend the airline compared to someone flying economy. Thus, we extracted two bits of information from the attributes of the customer - a binary indicator of whether they were in business class or first class vs. not and a binary indicator of whether a passenger was from the US vs. not. \par 
+The second question we sought to structure our data in order to answer was: how does a customers' review affect their recommendation? This question requires us to process the ```content``` column of our dataset in a reasonable way. We did this using the ```tidytext``` package in ```R```. Essentially, we split the content of each review up into singular words, removed words that were not associated with sentiments from the *bing* list of words (`tidytext::get_sentiments('bing')`) and then constructured a document-term matrix (DTM). This matrix contains columns that are 1 if a word is present and 0 if that word is not present. For instance, a customer with a review such as "This was a great flight" would be split into words, and then "great" would be the only word that existed in this review. This customer would then have a row of data in the DTM that consisted of zero for every other sentimental word that existed in other reviews, and a 1 in the column correspoding to 'great'. In the end, our document term matrix is a 41,117 by 3,513 matrix, using about 1.1 GB of memory.  \par 
+By joining our attribute predictors to our DTM, we obtained a dataset that was appropriately structured such that we were able to explore and attempt to answer the questions above. 
 
 
 ## Methodology
@@ -41,6 +47,23 @@ The dataset for this project is provided by Skytrax, a United Kingdom based cons
 To create our predictive model
 
 ### Statistical Models
+
+- **Naive Bayes** \newline
+
+Let R be the event that a customer recommends the airline. 
+$$
+P(\textrm{R} \; \vert "Great \; Time") \propto P("Great \; Time" \; \vert \; \textrm{R}) = P("Great" \; \vert \; \textrm{R}) \times P("Time" \; \vert \; \textrm{R})
+$$
+
+- **Logistic Regression**
+
+- **Logistic Regression (No Intercept)**
+
+- **Support Vector Machine**
+
+- **Random Forest**
+
+This shit failed so we legit didn't use it. 
 
 ### Technology Stack
 
@@ -64,12 +87,12 @@ kable(results_table)
 
 ## Contributions
 
-- Ben Brennan :
+- Ben Brennan
 
-- Mandy Meng Ni Ho:
+- Mandy Meng Ni Ho
 
 - Tahmeed Tureen
 
 ## Repository
 
-The work directory of this entire project has been published on a GitHub repository, which can be accessed via the following link: [](https://github.com/benbren/airplanes)
+The work directory of this entire project has been published on a GitHub repository, which can be accessed via the following link: (https://github.com/benbren/airplanes)
