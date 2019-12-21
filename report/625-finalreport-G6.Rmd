@@ -9,8 +9,11 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, message = F}
 library(knitr)
+library(tidyr)
+library(ggplot2)
+library(tm)
 ```
 
 
@@ -43,13 +46,14 @@ The second question we sought to structure our data in order to answer was: how 
 By joining our attribute predictors to our DTM, we obtained a dataset that was appropriately structured such that we were able to explore and attempt to answer the questions above. 
 
 
+
 ## Methodology
 
 The dataset provides both the input of the model as well as the output, therefore, we consider four **supervised** learning algorithms to create our classification model: (i) Naive Bayes Classifier, (ii) Logistic Regression, (iii) Support Vector Machines, and (iv) Random Forest. The Naive Bayes Classifier is the most easy-to-use algorithm when it comes to textual data classification (citation 1). It is a probabilistic classifier based on the Bayes Theorem and we use this as our baseline classifier. Logistic Regression is a regression-based model that allows us to model the probability of a customer's recommendation (citation 2). For the Logistic Regression, we consider a Lasso Logistic Regression without an intercept and one with an intercept. By applying the lasso shrinkage, we get to shrink the effects of low-importance words in our regression model to exactly zero. Support Vector Machine (SVM) is a discriminative classifier that uses hyperplanes in Euclidean spaces to separate datapoints into separate classes (citation 3). For our SVM, we used a linear kernel and allowed for shrinkage. Random Forest is an ensemble tree-based learning method that constructes multiple decision trees which can collectively used for classification tasks (see Citation). For all four of the models, we added two adjusting variables: US Citizen (1 = yes, 0 = no) and Flight Class (First, Business, and Economy). The discussion of how these algorithms work from a mathematical perspective is beyond the scope of this project report, however, we provide references at the end of this document. To assess and compare these models, we take a training-testing approach with recall, precision, specificty, and F1 scores as our evaluation metrics. The statistical computing was performed using ```R``` (packages: ```caret```, ```e1071```, ```randomForest```, ```glmnet```). We also compared the run time for each of the model's training using the ```system.time()``` functionality. As for the interactive dashboard, we use the ```shiny``` package in ```R``` to develop a Shiny application.
 
 ## Challenges
 
-The data processing aspect of this project was very smooth and we were able to do all of it on our local machines (Mac & P.C.). However, we ran into computational issues when it came to training the statistical models. We first attempted to train the models in ```R``` on our local machines. All of the models were either taking a significant amount of time to run or breaking due to timeout and memory errors. Therefore, we used the ```doParallel``` package to run our ```R``` scripts in parallel time. By doing this, we were able to run some of our scripts only on a subset of our full training set (n = 2,000). However, the computational time was still very demaning: SVM took more than 20 hours, Logistic Regression never converged, Naive Bayes ?, and RandomForest did not finish. 
+The data processing aspect of this project was very smooth and we were able to do all of it on our local machines (Mac & P.C.). However, we ran into computational issues when it came to training the statistical models. We first attempted to train the models in ```R``` on our local machines. All of the models were either taking a significant amount of time to run or breaking due to timeout and memory errors. Therefore, we used the ```doParallel``` package to run our ```R``` scripts in parallel time. By doing this, we were able to run some of our scripts only on a subset of our full training set (n = 2,000). However, the computational time was still very demanding: SVM and Naive Bayes took more than 20 hours, Logistic Regression never converged, and RandomForest did not finish after running on an 8GB Mac with a 2 GHz i5 Intel Core for over 36 hours. 
 
 Therefore, we opted to use the University of Michigan Biostatistics Cluster for  our model training. For all of the models, we allocated 10 GigaBytes (GB) of data with one core on the cluster. For Logistic Regression, we allocated a total of 45 mins on the cluster and both scripts used about 7 GB of memory (peak usage). For SVM and Naive Bayes, we also allocated 45 mins and found that they used both 10 GB and 8.7 GB respectively. We tried training the Random Forest on the cluster as well with combinations of 10GB, 15 GB, 45 minute, 2 hours, and 12 hour allocations. However, we were unsuccesful in training the model due to timeout and memory errors. Since we were on a time constraint and the other models were showing satisfactory results, we opted to stop training the Random Forest. It is important to mention that the ```R``` scripts submitted to the clusters incorporated the ```doParallel``` package's functionality. Each model had its own script which were run individually so that they could be run around the same time on the cluster. The cluster significantly improved our work flow and we were able to achieve satisfactory results.
 
@@ -61,7 +65,7 @@ Based on the predictive analysis on the test set (n = ), we found that Naive Bay
 
 ```{r, echo = FALSE}
 results_table <- 
-    cbind(model = c("Naive Bayes", "Logistic Regression w/ Lasso", "Logistic Reg. w/ Lasso (No. Intercept)", "Support Vector Machines"),
+    cbind.data.frame(model = c("Naive Bayes", "Logistic Regression w/ Lasso", "Logistic Reg. w/ Lasso (No. Intercept)", "Support Vector Machines"),
           rel_time = c(1842.39, 34.752, 40.403, 1565.65),
           recall_score = c(99.91, 72.41, 75.83, 87.34),
           prec_score = c(53.79, 88.63, 87.80, 85.21),
@@ -71,11 +75,29 @@ colnames(results_table) <- c("Model", "Time (sec)",
                              "Recall (%)", "Precision (%)", "F1 Score (%)")
 
 kable(results_table)
+
+results_long = pivot_longer(results_table, 2:5)
+results_long$Model = as.factor(results_long$Model)
+
+g = ggplot(results_long, aes(x = factor(Model), y = value)) + 
+  facet_wrap(~name, scales = 'free') + 
+  geom_bar(aes(fill = factor(Model)), stat = 'identity')
+
+l = c("LR w/o Int", "LR w/ Int", "Naive Bayes", "SVM")
+
+g1 = g + theme_bw() + 
+  scale_fill_discrete(name = "Model", labels = l) + 
+  theme(axis.text.x=element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank())
+
+g1
+
 ```
 
 ### Shiny Application
 
-We built our Shiny application using the SVM model as our classifier embedded behind the dashboard. This means that the dashboard makes predictions using the SVM model. The Shiny application can be viewed by running this command, ```shiny::runGitHub('airplanes','benbren', subdir = 'shiny')```, on the ```R``` console. It is important to note that the ```shiny``` package must first be installed before this app can be run. We provide an illustration of what the dashboard looks like below.
+We built our Shiny application using the SVM model as our classifier embedded behind the dashboard. This means that the dashboard makes predictions using the SVM model. The Shiny application can be viewed by running this command, ```shiny::runGitHub('airplanes','benbren', subdir = 'shiny')```, on the ```R``` console. It is important to note that the ```shiny``` package must first be installed before this app can be run.
 
 ### Discussion
 
@@ -87,7 +109,7 @@ There are several ways we could improve our statstical analyses in the future. I
 
 - Ben Brennan : Helped formulate the research question as well as collect, manipulate and analyze data in both the preprocessing and model development stages. Actively contributed to the writing of the training scripts, as well as the intial attribute modeling. Helped with the writing of the final project report, as well as maintenance of the GitHub repository and associated aspects (READMEs, etc.). Collaborated with teammates through meetings, GitHub collaboration and GroupMe conversations.
 
-- Mandy Meng Ni Ho :
+- Mandy Meng Ni Ho : Primary development of the RShiny app, along with active contributions to data preprocessing (especially with respect to the DTM matrix) and training model development. Active collaboration with group members via GitHub, GroupMe and in-person team meetings. 
 
 - Tahmeed Tureen : Helped formulated the research problem and motivation behind project, identified statistical methodology and evaluation metrics appropriate for text classification, helped find NLP tutorials for ```R```, helped write ```R``` scripts, wrote job scripts (```slurm``` files) for the cluster, helped write the final report, and collaborated with teammates via in-person meetings, ```GitHub```, and online messeging
 
