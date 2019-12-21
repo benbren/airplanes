@@ -129,8 +129,6 @@ We built our Shiny application using the SVM model as our classifier embedded be
 
 There are several ways we could improve our statstical analyses in the future. In this first iteration of the project, we did not attempt hyperparameter tuning for our models. For example, we did not use cross-validation to identify the "best" tuning parameter, $\lambda$, that minimizes the loss function for Lasso Logistic Regression. Hyperparameter tuning could potentially improve the prediction scores we see especially for Logistic Regression and Support Vector Machine. We could greatly improved our predictive model by using Deep Learning algorithms such as Feed Forward Neural Networks which are very popular in the field of computational NLP. As for data processing, we only explored the DTM approach when feature engineering our covariates. In the future, we would also like to explore other feature engineering approaches such as TF-IDF (term frequency-inverse document frequency) and Word Embeddings. This project was a challenging project that we formulated and enjoyed it very much. We hope to continue working on it after the course so that we can publish the Shiny application.
 
-\newpage
-
 ## Contributions
 
 - Ben Brennan : Helped formulate the research question as well as collect, manipulate and analyze data in both the preprocessing and model development stages. Actively contributed to the writing of the training scripts, as well as the intial attribute modeling. Helped with the writing of the final project report, as well as maintenance of the GitHub repository and associated aspects (READMEs, etc.). Collaborated with teammates through meetings, GitHub collaboration and GroupMe conversations.
