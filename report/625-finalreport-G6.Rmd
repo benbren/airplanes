@@ -38,6 +38,30 @@ The dataset for this project is provided by Skytrax, a United Kingdom based cons
 
 \newpage 
 
+```{r echo = F}
+
+dtm = readRDS("~/Dropbox/UMich/Fall2019/Biostat625/Project/rds/air_unk_matrix.rds")
+dtm = dtm[,-c(1,3512)]
+colsums = colSums(dtm)
+
+rnk = rank(-colsums, ties.method = 'min')
+
+id = rnk <= 15
+
+x = colnames(dtm)[id]
+freq = colsums[id]
+
+X = cbind.data.frame('word' = as.factor(x), 'amount' = freq )
+
+X = X[order(freq),]
+
+p = ggplot(X, aes(x = word, y = amount)) + geom_bar(stat = 'identity')
+p1 = p + theme_bw() + xlab("Word") + ylab("Number of Times Used") + 
+  theme(axis.text.x = element_text(angle=90, hjust=1)) + ggtitle('Top 15 Words')
+
+p1
+```
+
 ### Data Processing
 
 Data preprocessing for this project required two steps. The first was to include meaningful covariates that were not included in ```content```. In essence, we needed to answer the question: Is there anything outside of the review ( ```content```) that is significantly associated with whether or not an individual is going to recommend the airline? After answering this question, we are then able to understand how to process the non-review part of our data to make it efficient in our alogrithms. \par 
@@ -94,6 +118,8 @@ g1 = g + theme_bw() +
 g1
 
 ```
+
+\newpage 
 
 ### Shiny Application
 
