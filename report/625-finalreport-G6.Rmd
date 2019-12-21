@@ -49,11 +49,9 @@ The dataset provides both the input of the model as well as the output, therefor
 
 ## Challenges
 
-The data processing aspect of this project was very smooth and we were able to do all of it on our local machines (Mac & P.C.). However, we ran into computational issues when it came to training the statistical models. We first attempted to train the models in ```R``` on our local machines. All of the models were either taking a significant amount of time to run or breaking due to timeout and memory errors. Therefore, we used the ```doParallel``` package to run our ```R``` scripts in parallel time. By doing this, we were able to run some of our scripts only on a subset of our full training set (n = 2,000). However, the computational time was still very demaning: SVM took more than 20 hours, Logistic Regression never converged, Naive Bayes ?, and RandomForest did not finish. Therefore, we opted to use the University of Michigan Biostatistics Cluster for  our model training. For all of the models, we allocated 10 GigaBytes (GB) of data with one core on the cluster. For Logistic Regression, we allocated a total of 45 mins on the cluster and both scripts  
+The data processing aspect of this project was very smooth and we were able to do all of it on our local machines (Mac & P.C.). However, we ran into computational issues when it came to training the statistical models. We first attempted to train the models in ```R``` on our local machines. All of the models were either taking a significant amount of time to run or breaking due to timeout and memory errors. Therefore, we used the ```doParallel``` package to run our ```R``` scripts in parallel time. By doing this, we were able to run some of our scripts only on a subset of our full training set (n = 2,000). However, the computational time was still very demaning: SVM took more than 20 hours, Logistic Regression never converged, Naive Bayes ?, and RandomForest did not finish. 
 
-We attempted to train our models on our personal laptops (both Mac and P.C.). However, due to the large amounts of data particulary the large number of dependent variables ($X_{word_{i}}$) we were either not able to succesfully train our models (timeout or memory errors). Therefore, we subset the dataset to a smaller number of reviews and re-trained our models to assess if our code was running appropriately.
-
-Therefore, we opted to use the University of Michigan Biostatistics Cluster for our model training. For Logistic Regression 
+Therefore, we opted to use the University of Michigan Biostatistics Cluster for  our model training. For all of the models, we allocated 10 GigaBytes (GB) of data with one core on the cluster. For Logistic Regression, we allocated a total of 45 mins on the cluster and both scripts used about 7 GB of memory (peak usage). For SVM and Naive Bayes, we also allocated 45 mins and found that they used both 10 GB and 8.7 GB respectively. We tried training the Random Forest on the cluster as well with combinations of 10GB, 15 GB, 45 minute, 2 hours, and 12 hour allocations. However, we were unsuccesful in training the model due to timeout and memory errors. Since we were on a time constraint and the other models were showing satisfactory results, we opted to stop training the Random Forest. It is important to mention that the ```R``` scripts submitted to the clusters incorporated the ```doParallel``` package's functionality. Each model had its own script which were run individually so that they could be run around the same time on the cluster. The cluster significantly improved our work flow and we were able to achieve satisfactory results.
 
 ## Results
 
@@ -81,19 +79,17 @@ We built our Shiny application using the SVM model as our classifier embedded be
 
 ### Discussion
 
-<<<<<<< HEAD
-There are several ways we could improve our statstical analyses in the future.
+There are several ways we could improve our statstical analyses in the future. In this first iteration of the project, we did not attempt hyperparameter tuning for our models. For example, we did not use cross-validation to identify the "best" tuning parameter, $\lambda$, that minimizes the loss function for Lasso Logistic Regression. Hyperparameter tuning could potentially improve the prediction scores we see especially for Logistic Regression and Support Vector Machine. We could greatly improved our predictive model by using Deep Learning algorithms such as Feed Forward Neural Networks which are very popular in the field of computational NLP. As for data processing, we only explored the DTM approach when feature engineering our covariates. In the future, we would also like to explore other feature engineering approaches such as TF-IDF (term frequency-inverse document frequency) and Word Embeddings. This project was a challenging project that we formulated and enjoyed it very much. We hope to continue working on it after the course so that we can publish the Shiny application.
 
-=======
 \newpage
->>>>>>> eb210e39595cf53c281797c9e7e647b4e6621896
+
 ## Contributions
 
 - Ben Brennan : Helped formulate the research question as well as collect, manipulate and analyze data in both the preprocessing and model development stages. Actively contributed to the writing of the training scripts, as well as the intial attribute modeling. Helped with the writing of the final project report, as well as maintenance of the GitHub repository and associated aspects (READMEs, etc.). Collaborated with teammates through meetings, GitHub collaboration and GroupMe conversations.
 
 - Mandy Meng Ni Ho :
 
-- Tahmeed Tureen : Helped formulated the research problem, identified statistical methods and evaluation metrics appropriate for text classification, helped find NLP tutorials for ```R```, helped write ```R``` scripts, wrote job scripts (```slurm``` files) for the cluster, helped write the final report, and collaborated with teammates via in-person meetings, ```GitHub```, and online messenging
+- Tahmeed Tureen : Helped formulated the research problem and motivation behind project, identified statistical methodology and evaluation metrics appropriate for text classification, helped find NLP tutorials for ```R```, helped write ```R``` scripts, wrote job scripts (```slurm``` files) for the cluster, helped write the final report, and collaborated with teammates via in-person meetings, ```GitHub```, and online messeging
 
 ## Repository
 
