@@ -18,12 +18,13 @@ library(knitr)
 
 ### Background
 
-The integration of Machine Learning and Natural Language Processing (NLP) has been growing tremendously in the modern era. Powerful and flexible computers have allowed researchers in the field of NLP to apply statisical methodologies to large, unstructured data in the form of texts to draw insights from texts or create software application. Successful NLP applications such as the autocorrect feature on messaging apps, search engine suggestions, and question answering machines (i.e. ```Siri```, ```Cortana``` etc.) have increased the field's popularity. As a result, many companies have started to invest in NLP to analyze the large amounts of textual data at their disposal.
+The integration of the fields of Machine Learning and Natural Language Processing (NLP) has been growing tremendously in the modern era. Powerful and flexible computers have allowed researchers in the field of NLP to apply statisical methodologies to large, unstructured data in the form of texts to create software applications or draw meaningful insights. Successful NLP applications such as the autocorrect feature on messaging apps, search engine suggestions, and question answering machines (i.e. ```Siri```, ```Cortana``` etc.) have increased the field's popularity. Insights-driven NLP applications such as topic labeling (i.e. classifiying a text to a specific domain), spam and fraud detection, and sentiment analysis (i.e. classifying the tone of the text's author) have also been growning in popularity. As a result, many companies have started to invest in NLP to analyze the large amounts of textual data which they own at their disposal.
 
 ### Motivation
 
-In this project, we spin a scenario where we are Data Science consultants at a world renowed consultancy firm, **HuiJiang625 LLC**. The primary clients of this consultancy group are airline agencies (i.e. Delta, American Airlines etc.) who are looking to gather some insights from the flight reviews they receive from their customers. Essentially, these airline agencies would like to identify which of their customers are most likely to recommend their airline to a friend(s). Being able to do so would potentially help the marketing team at these agency optimize their business through targeted marketing. For example, if an airplane knows that Person B is very likely to recommend the   
+In this project, we spin a scenario where we are data science consultants at a world renowed consultancy firm, **HuiJiang625 LLC**. The primary clients of this consultancy group are airline agencies (i.e. Delta, American Airlines, & JetBlue etc.) who are looking to gather some insights from the flight reviews they receive from their customers everyday. The marketing teams at these agencies would like to identify customers who are most likely to recommend their airline to friend(s) or family member(s) based on their review of the flight. This would allow the teams to optimize their marketing strategy by making recommend-friendly customers their priority when sending out incentive-based offers such as gift cards, sky miles, or vouchers etc. in return for a recommendation. For example, if the marketing team knows that Tom is more likely to recommend than Sarah then the marketing team could first reach out to Tom. 
 
+With this objective in mind, our team is tasked with building a NLP-driven statstical model that takes in input of a customer's textual review (in English) and outputs whether or not that customer will recommend the airline. A secondary objective of this project is to provide an user-friendly application that allows the user to input a customer's review and immediately receive the answer of whether or not they will recommend. The purpose of this app is to eliminate the need for statistical knowledge in the user as well as mask the mathematical mechanisms behind an attractive dashboard.
 
 
 
@@ -44,7 +45,7 @@ By joining our attribute predictors to our DTM, we obtained a dataset that was a
 
 ## Methodology
 
-To create our predictive model
+The dataset provides both the input of the model as well as the output, therefore, we consider four supervised learning algorithms to create our classification model: (i) Naive Bayes Classifier, (ii) Logistic Regression, (iii) Support Vector Machines, and (iv) Random Forest. The Naive Bayes Classifier is the most easy-to-use algorithm when it comes to textual data classification (citation 1). It is a probabilistic classifier based on the Bayes Theorem and we use this as our baseline classifier. Logistic Regression is a regression-based model that allows us to model the probability of a customer's recommendation (citation 2). For the Logistic Regression, we consider a Lasso Logistic Regression without an intercept and one with an intercept. Applying the lasso shrinkage, we get to shrink the effects of low-importance words in our regression model to exactly zero. Support Vector Machine (SVM) is a discriminative classifier that uses hyperplanes in Euclidean spaces to separate datapoints into separate classes (citation 3). For our SVM, we used **hyperparameters**. Random Forest is an ensemble tree-based method. We separated the dataset as X% Training and Y% Test. The models were then trained on the training set using ```R``` (packages: ). To evaluate and compare the models, we used Recall, Precision, and F1 Scores. As for the interactive dashboard, we planned to develop a Shiny Application using the ```shiny``` package in ```R```.   
 
 ### Statistical Models
 
@@ -65,9 +66,17 @@ $$
 
 This shit failed so we legit didn't use it. 
 
-### Technology Stack
+## Computational Challenges
+
+We attempted to train our models on our personal laptops (both Mac and P.C.). However, due to the large amounts of data particulary the large number of dependent variables ($X_{word_{i}}$) we were either not able to succesfully train our models (timeout or memory errors). Therefore, we subset the dataset to a smaller number of reviews and re-trained our models to assess if our code was running appropriately.
+
+Therefore, we opted to use the University of Michigan Biostatistics Cluster for our model training. For Logistic Regression 
 
 ## Results
+
+### Statistical Results
+
+Based on the predictive analysis on the test set (n = ), we found that Support Vector Machines had the highest accuracy scores in terms of all three evaluation metrics. Logitic Regression (with and without Intercept) had very similar scores. The Naive Bayes Classifier performed the worst, however, it is our baseline and we expected it to perform poorly due to its underlying modeling assumptions (see Citation). These results are summarized in the following table.
 
 ```{r, echo = FALSE}
 results_table <- 
@@ -83,7 +92,11 @@ colnames(results_table) <- c("Model", "Time (sec)",
 kable(results_table)
 ```
 
-## Deliverables
+### Shiny Application
+
+The Shiny application can be viewed by running this command on the ```R``` console: . It is important to note that, the use of this app first need to install the ```shiny``` package on their personal machine.
+
+### Discussion
 
 ## Contributions
 
@@ -91,7 +104,7 @@ kable(results_table)
 
 - Mandy Meng Ni Ho :
 
-- Tahmeed Tureen :
+- Tahmeed Tureen : Helped formulated the research problem, identified statistical methods and evaluation metrics appropriate for text classification, helped find NLP tutorials for ```R```, helped write ```R``` scripts, wrote job scripts (```slurm``` files) for the cluster, helped write the final report, and collaborated with teammates via in-person meetings, ```GitHub```, and online messenging
 
 ## Repository
 
