@@ -49,7 +49,7 @@ The dataset provides both the input of the model as well as the output, therefor
 
 ## Challenges
 
-The data processing aspect of this project was very smooth and we were able to do all of it on our local machines (Mac & P.C.). However, we ran into computational issues when it came to training the statistical models. We first attempted to train the models in ```R``` on our local machines. All of the models were either taking a significant amount of time to run or breaking due to timeout and memory errors. Therefore, we used the ```doParallel``` package to run our ```R``` scripts in parallel time. By doing this, we were able to run some of our scripts only on a subset of our full training set (n = 2,000). However, the computational time was still very demaning: SVM took more than 20 hours, Logistic Regression never converged, Naive Bayes ?, and RandomForest did not finish. Therefore, we opted to use the University of Michigan Biostatistics Cluster for  our model training. For all of the models, we allocated 10 GigaBytes (GB) of data with one core on the cluster. For Logistic Regression, 
+The data processing aspect of this project was very smooth and we were able to do all of it on our local machines (Mac & P.C.). However, we ran into computational issues when it came to training the statistical models. We first attempted to train the models in ```R``` on our local machines. All of the models were either taking a significant amount of time to run or breaking due to timeout and memory errors. Therefore, we used the ```doParallel``` package to run our ```R``` scripts in parallel time. By doing this, we were able to run some of our scripts only on a subset of our full training set (n = 2,000). However, the computational time was still very demaning: SVM took more than 20 hours, Logistic Regression never converged, Naive Bayes ?, and RandomForest did not finish. Therefore, we opted to use the University of Michigan Biostatistics Cluster for  our model training. For all of the models, we allocated 10 GigaBytes (GB) of data with one core on the cluster. For Logistic Regression, we allocated a total of 45 mins on the cluster and both scripts  
 
 We attempted to train our models on our personal laptops (both Mac and P.C.). However, due to the large amounts of data particulary the large number of dependent variables ($X_{word_{i}}$) we were either not able to succesfully train our models (timeout or memory errors). Therefore, we subset the dataset to a smaller number of reviews and re-trained our models to assess if our code was running appropriately.
 
@@ -77,9 +77,11 @@ kable(results_table)
 
 ### Shiny Application
 
-The Shiny application can be viewed by running this command, ```shiny::runGitHub('airplanes','benbren', subdir = 'shiny')```, on the ```R``` console: . It is important to note that the ```shiny``` package must first be installed before this app can be run. We provide an illustration of what the dashboard looks like below.
+We built our Shiny application using the SVM model as our classifier embedded behind the dashboard. This means that the dashboard makes predictions using the SVM model. The Shiny application can be viewed by running this command, ```shiny::runGitHub('airplanes','benbren', subdir = 'shiny')```, on the ```R``` console. It is important to note that the ```shiny``` package must first be installed before this app can be run. We provide an illustration of what the dashboard looks like below.
 
 ### Discussion
+
+There are several ways we could improve our statstical analyses in the future.
 
 ## Contributions
 
