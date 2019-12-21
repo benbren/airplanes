@@ -71,14 +71,14 @@ This shit failed so we legit didn't use it.
 
 ```{r, echo = FALSE}
 results_table <- 
-    cbind(model = c("Naive Bayes", "Logistic Regression", "Logistic Reg. (No. Intercept)", "SVM"),
+    cbind(model = c("Naive Bayes", "Logistic Regression w/ Lasso", "Logistic Reg. w/ Lasso (No. Intercept)", "Support Vector Machines"),
           rel_time = c(0, 0, 0, 0),
           recall_score = c(0, 0, 0, 0),
           prec_score = c(0, 0, 0, 0),
           f1_score = c(0 ,0, 0, 0))
 
-colnames(results_table) <- c("Model", "Time (s)",
-                             "Recall", "Precision", "F1 Score")
+colnames(results_table) <- c("Model", "Time (sec)",
+                             "Recall (%)", "Precision (%)", "F1 Score (%)")
 
 kable(results_table)
 ```
@@ -89,10 +89,18 @@ kable(results_table)
 
 - Ben Brennan
 
+<<<<<<< HEAD
 - Mandy Meng Ni Ho
+=======
+- Mandy Meng Ni Ho :
+>>>>>>> 43ec285ce2f79a4a7501a6779b677e3c0068e7c4
 
-- Tahmeed Tureen
+- Tahmeed Tureen :
 
 ## Repository
 
+<<<<<<< HEAD
 The work directory of this entire project has been published on a GitHub repository, which can be accessed via the following link: (https://github.com/benbren/airplanes)
+=======
+The work directory of this entire project has been published on a GitHub repository, which can be accessed via the following link: [**CLICK HERE**](https://github.com/benbren/airplanes)
+>>>>>>> 43ec285ce2f79a4a7501a6779b677e3c0068e7c4
