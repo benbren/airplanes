@@ -28,40 +28,43 @@ US = c("US", "Not US")
 Rich = c("Economy", "Premium")
 
 # Define UI for application that draws a histogram
-header <- dashboardHeader(title = "Customer Review Prediction")
+header <- dashboardHeader(title = "Airline Customer Review Prediction", titleWidth = 500)
 
-# sidebar <- dashboardSidebar(
-#     # selection: select basket
-#     h3(" User Instruction:"),
-#     helpText("This dashboard is created for Airline marketing team in prediction of customers recommendation using (method)....")
-#     
-# )
+sidebar <- dashboardSidebar(
+    # selection: select basket
+    h3(" User Instruction:"),
+    box(width = 12, title = "This dashboard is created for airline marketing team in prediction of customers recommendation using NLP and SVM, please type the comments on the text box, then select categories from the dropdown selection, the results of whether customer recommend this airline or not will be shown on the lower right box.")
+    #helpText("This dashboard is created for Airline marketing team in prediction of customers recommendation using NLP and SVM, please type the comments on the text box, then select categories from the dropdown selection, the results of whether customer recommend this airline or not will be shown on the lower right box")
+    
+
+)
 
 body <- dashboardBody(
     
     
     fluidRow(
-        box(title = "Text comments",
+        box(width = 12, title = "Text comments",
             textAreaInput("text_comment", "Please type your comments:", row = 10),
-            status = "primary"),
-        
+            status = "primary")
+
+    ),
+    
+    fluidRow(
+        # box(title = "Customer Experience:",
+        #     sliderInput("overall_rating", "Please rate your overall experience:", 1, 10, 1),
+        #     sliderInput("cabin_rating", "Please rate your experience on cabin staff:", 1, 10, 1),
+        #     sliderInput("wifi_connectivity", "Please rate your experience on wifi connectivity:", 1, 10, 1),
+        #     status = "primary"),
         box(title = "Dropdown selection",
             #selectInput("selection_airline", label = "Select type of Airline", choices = airline),
             selectInput("selection_country", label = "Select Country Category", choices = US),
             selectInput("selection_income", label = "Select Cabin type", choices = Rich),
-            status = "primary")
-    ),
-    
-    fluidRow(
-        box(title = "Customer Experience:",
-            sliderInput("overall_rating", "Please rate your overall experience:", 1, 10, 1),
-            sliderInput("cabin_rating", "Please rate your experience on cabin staff:", 1, 10, 1),
-            sliderInput("wifi_connectivity", "Please rate your experience on wifi connectivity:", 1, 10, 1),
             status = "primary"),
-        
         box(title = "Results predicted from the model",
             textOutput("result"),
             status = "warning")
+
+
     )
     
 )
@@ -141,8 +144,8 @@ server <- function(input, output){
 shinyApp(
     ui = dashboardPage(
         header,
-        # sidebar,
-        dashboardSidebar(disable = TRUE),
+        sidebar,
+        #dashboardSidebar(disable = TRUE),
         body
     ),
     server = server
