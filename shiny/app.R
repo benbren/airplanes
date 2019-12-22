@@ -30,12 +30,12 @@ Rich = c("Economy", "Premium")
 # Define UI for application that draws a histogram
 header <- dashboardHeader(title = "Customer Review Prediction")
 
-sidebar <- dashboardSidebar(
-    # selection: select basket
-    h3(" User Instruction:"),
-    helpText("This dashboard is created for Airline marketing team in prediction of customers recommendation using (method)....")
-    
-)
+# sidebar <- dashboardSidebar(
+#     # selection: select basket
+#     h3(" User Instruction:"),
+#     helpText("This dashboard is created for Airline marketing team in prediction of customers recommendation using (method)....")
+#     
+# )
 
 body <- dashboardBody(
     
@@ -141,7 +141,8 @@ server <- function(input, output){
 shinyApp(
     ui = dashboardPage(
         header,
-        sidebar,
+        # sidebar,
+        dashboardSidebar(disable = TRUE),
         body
     ),
     server = server
